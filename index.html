@@ -1914,7 +1914,7 @@ tbody td:first-child {
         <tr><td>SEARCH_LIBRARY</td><td>Search 214+ knowledge files by keyword, type, platform, or staleness - near-zero token cost. Flags: --type, --platform, --stale, --list-all</td></tr>
         <tr><td>HEALTH_CHECK</td><td>8-check library scan: stale knowledge, memory budgets, doc backlog, estimation gaps, dependency map, content quality, library integrity, backlog health (P0/stale/unowned). Flag: --bl for backlog only.</td></tr>
         <tr><td>MAP_DEPENDENCIES</td><td>Generate knowledge dependency map; single-file impact analysis before editing any knowledge file. Flags: --stale (orphaned files), --reverse</td></tr>
-        <tr><td>MINE_PATTERNS</td><td>Mine cross-client patterns from memory/projects/*.md and backlog files - surfaces recurring risks, vendor limitations, estimation calibration, domain insights. Flag: --backlog for vendor pattern mining.</td></tr>
+        <tr><td>MINE_PATTERNS</td><td>Mine cross-client patterns from memory/projects/*/*.md and backlog files - surfaces recurring risks, vendor limitations, estimation calibration, domain insights. Flag: --backlog for vendor pattern mining.</td></tr>
         <tr><td>RESUME_OUTPUT</td><td>Resume an interrupted large artifact (SDD, LLD, spec) from its last completed chunk in _workspace/</td></tr>
         <tr colspan="2" style="background:var(--surface-code);color:#89b4fa;font-weight:600;font-size:11px;padding:6px 12px;letter-spacing:0.05em;"><td colspan="2" style="background:var(--surface-code);color:#89b4fa;font-weight:600;font-size:11px;padding:6px 12px;letter-spacing:0.05em;">BACKLOG MANAGEMENT - track deferred work, gaps, and vendor limitations across all levels</td></tr>
         <tr><td><strong>LOG_BACKLOG</strong></td><td><strong>Add a backlog item at any level - global, client, feature, or vendor. Assigns BL-NNN ID. Auto-called by END_SESSION Step A5 to extract session backlog items.</strong></td></tr>
@@ -1962,7 +1962,7 @@ tbody td:first-child {
     <span class="code-label">Claude Code</span>
     <span class="accent">&gt;</span> <span class="keyword">GENERATE_CLIENT_DOC</span> mvp-definition <span class="keyword">for</span> acme-retail<br><br>
     <span class="comment">// doc-writing-agent activates</span><br>
-    <span class="comment">// loads memory/projects/acme-retail.md - pre-fills known facts, skips repeat questions</span><br>
+    <span class="comment">// loads memory/projects/acme-retail/acme-retail.md - pre-fills known facts, skips repeat questions</span><br>
     <span class="comment">// checks doc-template-evolution.md for approved template improvements</span><br>
     <span class="comment">// asks 3-5 clarifying questions specific to MVP definition</span><br>
     <span class="comment">// generates complete document: assumptions, dependencies,</span><br>
@@ -2021,7 +2021,7 @@ tbody td:first-child {
             <div class="flow-branch-if">
               <div class="flow-branch-cond">IF existing client + feature</div>
               <div class="flow-branch-action">→ Load memory context</div>
-              <div class="flow-branch-sub">memory/projects/{client}.md + feature file - pre-fills known facts, skips repeated questions</div>
+              <div class="flow-branch-sub">memory/projects/{client}/{client}.md + feature file - pre-fills known facts, skips repeated questions</div>
             </div>
             <div class="flow-branch-if">
               <div class="flow-branch-cond">IF analysis / gap check</div>
@@ -2341,7 +2341,7 @@ tbody td:first-child {
               <div class="flow-node-label">Memory Updated</div>
               <div class="flow-node-title">Persistent Context</div>
               <div class="flow-memory-grid">
-                <span class="flow-mem-chip">projects/acme-retail.md</span>
+                <span class="flow-mem-chip">projects/acme-retail/acme-retail.md</span>
                 <span class="flow-mem-chip">architecture-decisions.md</span>
                 <span class="flow-mem-chip">platform-constraints.md</span>
               </div>
@@ -2681,7 +2681,7 @@ tbody td:first-child {
   <div class="compare-grid animate-on-scroll">
     <div class="compare-card recommended">
       <div class="rec-badge">Track A - Client Memory</div>
-      <h4>memory/projects/{client}.md</h4>
+      <h4>memory/projects/{client}/{client}.md</h4>
       <div class="role">Keeps client context permanently current</div>
       <ul>
         <li>Decisions made this session</li>
