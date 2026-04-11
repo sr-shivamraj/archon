@@ -1,0 +1,3303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHON - A smart AI Architecture Copilot That Handles the Repetitive Work</title>
+<meta property="og:title" content="Archon - AI Architecture Copilot: From 2–3 Days to ~1 Hour per SDD" />
+<meta property="og:description" content="How a structured .claude/ workspace with specialist agents, persistent memory, and a knowledge base became a domain-aware architecture partner for enterprise loyalty platforms." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://sr-shivamraj.github.io/archon/" />
+<meta property="og:image" content="" /><!-- HUMAN TO SUPPLY: cover image URL for LinkedIn preview -->
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,400&family=Source+Code+Pro:wght@400;600&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1a2e;
+  --ink-soft: #3a3a5c;
+  --ink-muted: #6b6b8d;
+  --surface: #faf9f7;
+  --surface-warm: #f5f0eb;
+  --surface-code: #1e1e2e;
+  --accent: #e85d26;
+  --accent-glow: #ff6b35;
+  --accent-deep: #c44d1a;
+  --teal: #0d9488;
+  --teal-soft: #e0f5f3;
+  --blue: #3b5bdb;
+  --blue-soft: #e7ecfb;
+  --gold: #b8860b;
+  --gold-soft: #fdf6e3;
+  --border: #e0ddd8;
+  --radius: 6px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--ink);
+  background: var(--surface);
+  line-height: 1.72;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Hero ─── */
+.hero {
+  min-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px 24px 60px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(165deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 80vw;
+  height: 80vw;
+  background: radial-gradient(circle, rgba(232,93,38,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, rgba(13,148,136,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 1px 28px 1px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 16px;
+  background: rgba(232,93,38,0.12);
+  border: 1px solid rgba(232,93,38,0.25);
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-glow);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  animation: fadeInUp 0.8s ease both;
+}
+
+.hero h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: clamp(26px, 5.5vw, 52px);
+  line-height: 1.1;
+  color: #fff;
+  margin-bottom: 28px;
+  letter-spacing: -0.02em;
+  animation: fadeInUp 0.8s 0.15s ease both;
+}
+
+.hero h1 span {
+  background: linear-gradient(135deg, var(--accent-glow), #ffb088);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-sub {
+  font-size: 20px;
+  color: rgba(255,255,255,0.65);
+  max-width: 720px;
+  line-height: 1.7;
+  animation: fadeInUp 0.8s 0.3s ease both;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 42px;
+  margin-top: 48px;
+  animation: fadeInUp 0.8s 0.45s ease both;
+}
+
+.hero-stat {
+  text-align: left;
+}
+
+.hero-stat-num {
+  font-family: 'Fraunces', serif;
+  font-weight: 800;
+  font-size: 42px;
+  color: var(--accent-glow);
+  line-height: 1;
+}
+
+.hero-stat-label {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 4px;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Article Body ─── */
+.article {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 80px 24px 120px;
+}
+
+.article h2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 1.2;
+  margin: 72px 0 20px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.article h2:first-child { margin-top: 0; }
+
+.article h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  margin: 48px 0 12px;
+  color: var(--ink);
+}
+
+.article p {
+  margin-bottom: 18px;
+  color: var(--ink-soft);
+}
+
+.article strong { color: var(--ink); font-weight: 600; }
+
+.article a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+.article a:hover { border-bottom-color: var(--accent); }
+
+/* Lead paragraph */
+.lead {
+  font-size: 20px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  margin-bottom: 32px;
+}
+
+/* Pull quote */
+.pull-quote {
+  margin: 48px -40px;
+  padding: 32px 40px;
+  border-left: 4px solid var(--accent);
+  background: var(--surface-warm);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+/* Info cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin: 28px 0 32px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+
+.card:hover {
+  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+  transform: translateY(-2px);
+}
+
+.card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+
+.card-icon.orange { background: rgba(232,93,38,0.1); }
+.card-icon.teal { background: var(--teal-soft); }
+.card-icon.blue { background: var(--blue-soft); }
+.card-icon.gold { background: var(--gold-soft); }
+
+.card h4 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.card p {
+  font-size: 14px;
+  color: var(--ink-muted);
+  margin-bottom: 0;
+  line-height: 1.55;
+}
+
+/* Code blocks */
+.code-block {
+  background: var(--surface-code);
+  color: #cdd6f4;
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin: 20px 0 28px;
+  overflow-x: auto;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 14px;
+  line-height: 1.65;
+  position: relative;
+}
+
+.code-block .comment { color: #6c7086; }
+.code-block .keyword { color: #cba6f7; }
+.code-block .string { color: #a6e3a1; }
+.code-block .accent { color: #fab387; }
+.code-block .flag { color: #89b4fa; }
+.code-block .dim { color: #585b70; }
+
+.code-label {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 11px;
+  color: #585b70;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Directory tree */
+.dir-tree {
+  background: var(--surface-code);
+  color: #cdd6f4;
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  margin: 20px 0 28px;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 13.5px;
+  line-height: 1.8;
+  overflow-x: auto;
+}
+
+.dir-tree .folder { color: #89b4fa; font-weight: 600; }
+.dir-tree .file { color: #a6adc8; }
+.dir-tree .count { color: #6c7086; }
+.dir-tree .desc { color: #585b70; }
+.dir-tree .highlight { color: #fab387; }
+
+/* Tables */
+.table-wrap {
+  margin: 20px 0 28px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+thead th {
+  text-align: left;
+  padding: 12px 16px;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+thead th:first-child { border-radius: var(--radius) 0 0 0; }
+thead th:last-child { border-radius: 0 var(--radius) 0 0; }
+
+tbody td {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink-soft);
+}
+
+tbody tr:nth-child(even) { background: rgba(0,0,0,0.015); }
+
+tbody td:first-child {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 13px;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Numbered list with custom styling */
+.step-list {
+  counter-reset: steps;
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 32px;
+}
+
+.step-list li {
+  counter-increment: steps;
+  padding: 16px 20px 16px 72px;
+  position: relative;
+  margin-bottom: 12px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--ink-soft);
+}
+
+.step-list li::before {
+  content: counter(steps);
+  position: absolute;
+  left: 20px;
+  top: 14px;
+  width: 32px;
+  height: 32px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.step-list li strong { color: var(--ink); }
+
+/* Feature blocks */
+.feature-block {
+  margin: 36px 0;
+  padding: 28px 32px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: #fff;
+}
+
+.feature-block h4 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.feature-block h4 .tag {
+  font-size: 11px;
+  padding: 2px 10px;
+  border-radius: 100px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tag-orange { background: rgba(232,93,38,0.1); color: var(--accent-deep); }
+.tag-teal { background: var(--teal-soft); color: var(--teal); }
+.tag-blue { background: var(--blue-soft); color: var(--blue); }
+
+/* Comparison section */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 24px 0 32px;
+}
+
+.compare-card {
+  padding: 24px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.compare-card.recommended {
+  border-color: var(--teal);
+  background: linear-gradient(to bottom, var(--teal-soft), #fff);
+}
+
+.compare-card h4 {
+  font-size: 17px;
+  margin-bottom: 4px;
+}
+
+.compare-card .role {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-bottom: 14px;
+}
+
+.compare-card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.compare-card li {
+  font-size: 14px;
+  padding: 4px 0;
+  color: var(--ink-soft);
+}
+
+.compare-card li::before {
+  content: '✓ ';
+  color: var(--teal);
+  font-weight: 700;
+}
+
+.rec-badge {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 10px;
+  background: var(--teal);
+  color: #fff;
+  border-radius: 100px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+
+/* Separator */
+.sep {
+  height: 1px;
+  background: var(--border);
+  margin: 64px 0;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 48px 24px;
+  background: var(--ink);
+  color: rgba(255,255,255,0.4);
+  font-size: 14px;
+}
+
+.footer strong { color: rgba(255,255,255,0.7); }
+
+/* Responsive */
+@media (max-width: 700px) {
+  .hero-stats { flex-direction: column; gap: 20px; }
+  .compare-grid { grid-template-columns: 1fr; }
+  .pull-quote { margin: 36px 0; padding: 24px; font-size: 19px; }
+  .code-block { padding: 16px 18px; font-size: 13px; }
+  .step-list li { padding-left: 64px; }
+}
+
+/* Scroll-triggered animations */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Flow Diagram ─── */
+.flow-diagram {
+  margin: 32px 0 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flow-stage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flow-arrow {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flow-node {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 22px 26px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  position: relative;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.flow-node:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+}
+
+.flow-node-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.flow-node-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.flow-node-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+
+.flow-node-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+  font-family: 'Fraunces', serif;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.flow-node-detail {
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.flow-node-detail code {
+  background: rgba(0,0,0,0.06);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 12.5px;
+}
+
+/* Node color variants */
+.flow-node-user {
+  background: linear-gradient(135deg, #fef3ee, #fde8da);
+  border: 1px solid rgba(232,93,38,0.2);
+}
+.flow-node-user .flow-node-icon { background: rgba(232,93,38,0.15); }
+.flow-node-user .flow-node-label { color: var(--accent-deep); }
+
+.flow-node-system {
+  background: linear-gradient(135deg, #f0f4f8, #e8edf5);
+  border: 1px solid rgba(59,91,219,0.15);
+}
+.flow-node-system .flow-node-icon { background: rgba(59,91,219,0.12); }
+.flow-node-system .flow-node-label { color: var(--blue); }
+
+.flow-node-command {
+  background: linear-gradient(135deg, #fef3ee, #fff5ee);
+  border: 1px solid rgba(232,93,38,0.18);
+}
+.flow-node-command .flow-node-icon { background: rgba(232,93,38,0.12); }
+.flow-node-command .flow-node-label { color: var(--accent-deep); }
+
+.flow-node-agent {
+  background: linear-gradient(135deg, #e8f8f5, #e0f5f3);
+  border: 1px solid rgba(13,148,136,0.2);
+}
+.flow-node-agent .flow-node-icon { background: rgba(13,148,136,0.12); }
+.flow-node-agent .flow-node-label { color: var(--teal); }
+
+.flow-node-token {
+  background: linear-gradient(135deg, #f0f4f8, #eef1fa);
+  border: 2px solid rgba(59,91,219,0.2);
+}
+.flow-node-token .flow-node-icon { background: rgba(59,91,219,0.12); }
+.flow-node-token .flow-node-label { color: var(--blue); }
+
+.flow-node-knowledge {
+  background: linear-gradient(135deg, #e8f8f5, #edf9f5);
+  border: 1px solid rgba(13,148,136,0.18);
+}
+.flow-node-knowledge .flow-node-icon { background: rgba(13,148,136,0.12); }
+.flow-node-knowledge .flow-node-label { color: var(--teal); }
+
+.flow-node-generate {
+  background: linear-gradient(135deg, #f0f0fa, #eef1fa);
+  border: 2px solid rgba(59,91,219,0.18);
+}
+.flow-node-generate .flow-node-icon { background: rgba(59,91,219,0.12); }
+.flow-node-generate .flow-node-label { color: var(--blue); }
+
+.flow-node-output {
+  background: linear-gradient(135deg, #fdf6e3, #fef8e8);
+  border: 1px solid rgba(184,134,11,0.2);
+}
+.flow-node-output .flow-node-icon { background: rgba(184,134,11,0.12); }
+.flow-node-output .flow-node-label { color: var(--gold); }
+
+.flow-node-quality {
+  background: linear-gradient(135deg, #e8f8f5, #edf9f5);
+  border: 1px solid rgba(13,148,136,0.18);
+}
+.flow-node-quality .flow-node-icon { background: rgba(13,148,136,0.12); }
+.flow-node-quality .flow-node-label { color: var(--teal); }
+.flow-node-quality .flow-node-title { font-size: 15px; }
+
+.flow-node-final {
+  background: linear-gradient(135deg, #fef3ee, #fff5ee);
+  border: 2px solid var(--accent);
+}
+.flow-node-final .flow-node-icon { background: rgba(232,93,38,0.15); }
+.flow-node-final .flow-node-label { color: var(--accent-deep); }
+.flow-node-final .flow-node-title { font-size: 15px; }
+
+.flow-node-memory {
+  background: linear-gradient(135deg, #f5f0fa, #f0ecf8);
+  border: 2px dashed rgba(100,80,160,0.3);
+}
+.flow-node-memory .flow-node-icon { background: rgba(100,80,160,0.1); }
+.flow-node-memory .flow-node-label { color: #6b50a0; }
+.flow-node-memory .flow-node-title { font-size: 15px; }
+
+/* Checkpoint node */
+.flow-node-checkpoint {
+  background: linear-gradient(135deg, #fff5ee, #fef0e6);
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 0 4px rgba(232,93,38,0.08);
+}
+.flow-node-checkpoint .flow-node-icon { background: rgba(232,93,38,0.15); }
+.flow-node-checkpoint .flow-node-label { color: var(--accent-deep); }
+
+.flow-checkpoint-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0;
+}
+
+.flow-cp-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.cp-arch { background: rgba(59,91,219,0.1); color: var(--blue); }
+.cp-contract { background: rgba(13,148,136,0.1); color: var(--teal); }
+.cp-security { background: rgba(220,50,50,0.08); color: #c0392b; }
+.cp-business { background: rgba(184,134,11,0.1); color: var(--gold); }
+.cp-migration { background: rgba(100,80,160,0.08); color: #6b50a0; }
+.cp-data { background: rgba(59,91,219,0.08); color: var(--blue); }
+.cp-product { background: rgba(232,93,38,0.1); color: var(--accent-deep); }
+.cp-estimate { background: rgba(13,148,136,0.08); color: var(--teal); }
+.cp-critical { background: rgba(220,50,50,0.1); color: #c0392b; }
+
+.flow-cp-example {
+  margin: 10px 0;
+  padding: 10px 14px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.flow-cp-note {
+  font-size: 12px;
+  color: var(--ink-muted);
+  font-style: italic;
+}
+
+/* Split layout (two nodes side by side) */
+.flow-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  width: 100%;
+}
+
+/* Token chain inside token node */
+.flow-token-chain {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 8px;
+  flex-wrap: wrap;
+}
+
+.flow-token-step {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: center;
+  flex: 1;
+  min-width: 110px;
+}
+
+.flow-token-step strong {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 12px;
+  color: var(--blue);
+}
+
+.flow-token-cost {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--teal);
+  margin: 2px 0;
+}
+
+.flow-token-arrow {
+  color: var(--ink-muted);
+  font-size: 18px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.flow-token-result {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--teal);
+  padding: 6px 12px;
+  background: rgba(13,148,136,0.06);
+  border-radius: 6px;
+  text-align: center;
+}
+
+/* Knowledge chips */
+.flow-knowledge-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 8px;
+}
+
+.flow-knowledge-chip {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.chip-template { background: rgba(232,93,38,0.1); color: var(--accent-deep); }
+.chip-guide { background: rgba(13,148,136,0.1); color: var(--teal); }
+.chip-example { background: rgba(59,91,219,0.1); color: var(--blue); }
+.chip-quality { background: rgba(184,134,11,0.1); color: var(--gold); }
+.chip-size { display: block; font-size: 10px; font-weight: 400; opacity: 0.7; margin-top: 2px; }
+
+.flow-knowledge-skipped {
+  font-size: 12px;
+  color: var(--ink-muted);
+  font-style: italic;
+}
+
+/* Generation steps */
+.flow-generate-steps {
+  margin: 10px 0;
+}
+
+.flow-gen-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.flow-gen-num {
+  width: 22px;
+  height: 22px;
+  background: var(--blue);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.flow-gen-note {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--ink-muted);
+  padding: 8px 12px;
+  background: rgba(59,91,219,0.04);
+  border-radius: 6px;
+  border-left: 3px solid rgba(59,91,219,0.2);
+}
+
+/* Chunk visualization */
+.flow-chunk-visual {
+  display: flex;
+  gap: 6px;
+  margin: 10px 0 8px;
+  flex-wrap: wrap;
+}
+
+.flow-chunk {
+  padding: 8px 14px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 12px;
+  text-align: center;
+  line-height: 1.3;
+  flex: 1;
+  min-width: 90px;
+  color: var(--ink-soft);
+}
+
+.flow-chunk .chunk-size {
+  display: block;
+  font-size: 10px;
+  color: var(--ink-muted);
+  margin-top: 2px;
+}
+
+.flow-chunk-active {
+  border-color: var(--gold);
+  background: var(--gold-soft);
+  font-weight: 600;
+  color: var(--gold);
+  animation: chunkPulse 2s ease-in-out infinite;
+}
+
+.flow-chunk-pending {
+  opacity: 0.4;
+  border-style: dashed;
+}
+
+.flow-chunk-note {
+  font-size: 12.5px;
+  color: var(--ink-muted);
+  font-style: italic;
+}
+
+@keyframes chunkPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(184,134,11,0.15); }
+  50% { box-shadow: 0 0 0 6px rgba(184,134,11,0.05); }
+}
+
+/* Memory chips */
+.flow-memory-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0;
+}
+
+.flow-mem-chip {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 11px;
+  padding: 4px 10px;
+  background: rgba(100,80,160,0.08);
+  border-radius: 4px;
+  color: #6b50a0;
+}
+
+/* Phase labels */
+.flow-phase-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin: 4px 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.flow-phase-label::before,
+.flow-phase-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Conditional router node */
+.flow-node-router {
+  border: 2px dashed rgba(232,93,38,0.35);
+  background: linear-gradient(135deg, rgba(232,93,38,0.03), rgba(59,91,219,0.03));
+}
+.flow-node-router .flow-node-icon { background: rgba(232,93,38,0.15); }
+.flow-node-router .flow-node-label { color: var(--accent-deep); }
+.flow-router-branches {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+.flow-branch-if {
+  background: var(--surface-code);
+  border-radius: 8px;
+  padding: 9px 12px;
+  border-left: 3px solid;
+}
+.flow-branch-if:nth-child(1) { border-color: var(--accent); }
+.flow-branch-if:nth-child(2) { border-color: var(--teal); }
+.flow-branch-if:nth-child(3) { border-color: var(--blue); }
+.flow-branch-if:nth-child(4) { border-color: var(--gold); }
+.flow-branch-cond { font-size: 10px; font-weight: 700; color: #89b4fa; margin-bottom: 3px; letter-spacing: 0.04em; }
+.flow-branch-action { font-size: 12px; font-weight: 600; color: #e2e8f0; }
+.flow-branch-sub { font-size: 10px; color: #94a3b8; margin-top: 3px; }
+.flow-branch-merge {
+  margin-top: 12px;
+  font-size: 11px;
+  color: var(--teal);
+  font-weight: 600;
+  text-align: center;
+  padding: 7px 12px;
+  background: rgba(13,148,136,0.07);
+  border-radius: 6px;
+  border: 1px solid rgba(13,148,136,0.18);
+}
+
+/* Parallel execution block */
+.flow-parallel-block { width: 100%; }
+.flow-parallel-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--blue);
+}
+.flow-parallel-banner::before,
+.flow-parallel-banner::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(59,91,219,0.22);
+  border-top: 1px dashed rgba(59,91,219,0.22);
+}
+.flow-parallel-nodes-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+.flow-parallel-nodes-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+.flow-parallel-nodes-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  align-items: stretch;
+}
+.flow-parallel-footer {
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: center;
+  font-style: italic;
+}
+
+/* Context node */
+.flow-node-context {
+  border: 1.5px solid rgba(184,134,11,0.22);
+  background: rgba(184,134,11,0.03);
+}
+.flow-node-context .flow-node-icon { background: rgba(184,134,11,0.12); }
+.flow-node-context .flow-node-label { color: var(--gold); }
+.flow-node-context .flow-node-title { font-size: 15px; }
+
+/* Specialist agent nodes (compact) */
+.flow-node-specialist {
+  border: 1.5px solid rgba(13,148,136,0.2);
+  background: rgba(13,148,136,0.03);
+  padding: 14px 16px;
+}
+.flow-node-specialist .flow-node-icon { width: 36px; height: 36px; font-size: 18px; background: rgba(13,148,136,0.12); }
+.flow-node-specialist .flow-node-label { color: var(--teal); font-size: 9px; }
+.flow-node-specialist .flow-node-title { font-size: 12px; }
+.flow-node-specialist .flow-node-detail { font-size: 10px; }
+
+/* Conditional badge */
+.flow-conditional-note {
+  font-size: 10px;
+  color: var(--gold);
+  font-style: italic;
+  margin-top: 6px;
+  padding: 4px 10px;
+  background: rgba(184,134,11,0.07);
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .flow-split { grid-template-columns: 1fr; }
+  .flow-token-chain { flex-direction: column; }
+  .flow-token-arrow { transform: rotate(90deg); }
+  .flow-chunk-visual { flex-direction: column; }
+  .flow-router-branches { grid-template-columns: 1fr; }
+  .flow-parallel-nodes-3,
+  .flow-parallel-nodes-4 { grid-template-columns: 1fr; }
+  .flow-parallel-nodes-2 { grid-template-columns: 1fr; }
+}
+
+/* ── Why Archon: Two Ways section ── */
+.way-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 32px 0;
+  align-items: start;
+}
+.way-card {
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.way-header {
+  padding: 14px 20px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.way-header.inefficient {
+  background: linear-gradient(135deg, #f5f5f5, #ebebeb);
+  color: #666;
+  border-bottom: 1px solid #ddd;
+}
+.way-header.efficient {
+  background: linear-gradient(135deg, var(--teal-soft), #d4f5ef);
+  color: var(--teal);
+  border-bottom: 1px solid rgba(13,148,136,0.2);
+}
+.way-body {
+  background: #fff;
+  padding: 20px;
+}
+.session-chain {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.session-block {
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13px;
+  position: relative;
+}
+.session-block.bad {
+  background: #fafafa;
+  border: 1px solid #e5e5e5;
+}
+.session-block.good {
+  background: linear-gradient(135deg, #f0fdf9, #e8faf5);
+  border: 1px solid rgba(13,148,136,0.18);
+}
+.session-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.session-label.bad { color: #999; }
+.session-label.good { color: var(--teal); }
+.session-rows {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 5px 10px;
+  align-items: baseline;
+  margin: 6px 0 8px;
+}
+.sr-text {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  text-align: left;
+}
+.sr-text code {
+  background: rgba(0,0,0,0.06);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 11.5px;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  align-self: start;
+  margin-top: 1px;
+}
+.pill-red { background: rgba(220,38,38,0.08); color: #b91c1c; }
+.pill-grey { background: rgba(100,100,100,0.08); color: #555; }
+.pill-teal { background: rgba(13,148,136,0.1); color: var(--teal); }
+.pill-gold { background: rgba(184,134,11,0.1); color: #92600a; }
+.pill-blue { background: rgba(59,91,219,0.1); color: var(--blue); }
+.session-verdict {
+  margin-top: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.session-verdict.bad {
+  background: rgba(220,38,38,0.06);
+  color: #b91c1c;
+}
+.session-verdict.good {
+  background: rgba(13,148,136,0.08);
+  color: var(--teal);
+}
+.chain-connector {
+  display: flex;
+  align-items: center;
+  padding: 4px 14px;
+  gap: 8px;
+  font-size: 11px;
+}
+.chain-connector.broken {
+  color: #ccc;
+}
+.chain-connector.live {
+  color: var(--teal);
+}
+.chain-line {
+  flex: 1;
+  height: 1px;
+  border-top: 2px dashed currentColor;
+}
+.chain-label {
+  font-weight: 600;
+  white-space: nowrap;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+}
+.insight-trio {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 28px 0 8px;
+}
+.insight-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+}
+.insight-icon {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+.insight-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.insight-desc {
+  font-size: 13px;
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+.analogy-box {
+  margin: 32px 0;
+  padding: 28px 32px;
+  background: linear-gradient(135deg, #fef3ee 0%, #fff8f4 100%);
+  border: 1px solid rgba(232,93,38,0.18);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+}
+.analogy-box h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent-deep);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.analogy-box p {
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  line-height: 1.65;
+  margin: 0;
+}
+.analogy-box p + p { margin-top: 10px; }
+.dag-visual {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 14px 0 6px;
+}
+.dag-node {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.dag-node.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(232,93,38,0.2);
+}
+.dag-node.past {
+  background: rgba(13,148,136,0.12);
+  color: var(--teal);
+  border: 1.5px solid rgba(13,148,136,0.3);
+}
+.dag-node.future {
+  background: #f0f0f0;
+  color: #aaa;
+  border: 1.5px dashed #ccc;
+}
+.dag-edge {
+  flex: 1;
+  min-width: 20px;
+  height: 2px;
+  position: relative;
+}
+.dag-edge.live { background: var(--teal); }
+.dag-edge.live::after {
+  content: '';
+  position: absolute;
+  right: -4px;
+  top: -3px;
+  border: 4px solid transparent;
+  border-left-color: var(--teal);
+}
+.dag-edge.broken {
+  background: #e0e0e0;
+  background: repeating-linear-gradient(90deg, #e0e0e0 0, #e0e0e0 4px, transparent 4px, transparent 8px);
+}
+.dag-label {
+  font-size: 11px;
+  color: var(--ink-muted);
+  margin-top: 4px;
+}
+@media (max-width: 700px) {
+  .way-compare { grid-template-columns: 1fr; }
+  .insight-trio { grid-template-columns: 1fr; }
+  .session-rows { grid-template-columns: auto 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════ HERO ════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">◆ Architecture Engineering</div>
+    <h1><span>ARCHON</span> - A Smart AI Architecture System That Handles the Repetitive Work, So I Can Focus on What Actually Needs an Architect</h1>
+    <p class="hero-sub">How a structured knowledge library, 21 specialist agents, and a command system became <strong style="color:#fff;">Archon</strong> - a persistent AI architecture partner that generates implementation-ready SDDs, runs risk analysis, debates design decisions, and remembers everything across sessions.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">384</div>
+        <div class="hero-stat-label">Files in Archon</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">27</div>
+        <div class="hero-stat-label">Agents (21 specialist + 6 debate)</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">39</div>
+        <div class="hero-stat-label">Commands</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">≤5%</div>
+        <div class="hero-stat-label">Token Budget (lean tasks)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ ARTICLE ════════════════════════════════════════════ -->
+<article class="article">
+
+  <div class="feature-block animate-on-scroll" style="background:var(--blue-soft);border-left:3px solid var(--blue);margin-bottom:32px;">
+    <h4 style="color:var(--blue);">Who This Is For</h4>
+    <p>This post is written for Architects, senior developers, and technical leads who work with AI assistants on complex enterprise platforms. The examples come from a loyalty rewards domain - but the Archon pattern applies to any team with a stable platform architecture, repeating deliverables (SDDs, LLDs, specs), and multi-session AI workflows. If you've ever spent the first 20 minutes of a Claude session re-explaining your stack, this is for you.</p>
+  </div>
+
+  <p class="lead">Most people use AI assistants like a search engine - ask a question, get an answer, start over. But as an Architect designing enterprise loyalty platforms, I needed something fundamentally different: an AI that <strong>knows my entire platform</strong>, <strong>remembers past decisions</strong>, and can <strong>generate 50-page design documents</strong> that are implementation-ready and architect-reviewed. So, I built one.</p>
+
+  <p>This is the story of how a simple prompt evolved into a 384-file AI Architecture Copilot - Archon - A <code>.claude</code> workspace with specialist agents, architecture debate systems, persistent memory, and a knowledge base covering every API endpoint, every Capillary product, and every integration pattern in the Rewards+ Platform.</p>
+
+  <div class="feature-block animate-on-scroll" style="background:var(--blue-soft);border-left:4px solid var(--blue);margin-bottom:32px;">
+    <h4>What Archon Is - and Is Not</h4>
+    <p>Archon is a <strong>domain-specific Architect Copilot</strong> - a structured <code>.claude/</code> workspace built to help one Architect produce high-quality architecture output for a complex, well-defined platform. It runs locally, outputs to files, and has no deployed infrastructure.</p>
+    <p style="margin-bottom:0;">It is <strong>not</strong> a deployed AI runtime, not a multi-tenant SaaS, not a general-purpose agent framework, and not a vector-database RAG system. It shares its name with other "Archon" frameworks in the agentic AI ecosystem (LangGraph builders, inference research frameworks) - those are entirely different systems. The right evaluation question is: <em>does it reliably help a single architect produce consistent, implementation-ready architecture documents?</em> - not: <em>could it scale to 10,000 concurrent users?</em></p>
+  </div>
+
+  <!-- ─── Section: Why Structured Beats Default ─── -->
+  <h2>Two Ways to Work with Claude - and Why One Wins Every Time</h2>
+
+  <p>Claude is powerful out of the box. But "powerful" and "optimized for your specific work" are two very different things. Most people use Claude the first way. Archon is the second.</p>
+
+  <div class="analogy-box">
+    <h4>🗺️ The Navigation Analogy</h4>
+    <p>Imagine driving to a city you've never visited. You could ask a different stranger for directions at every intersection - each one knows their neighborhood, gives you their best answer, and the moment you turn the corner they forget you exist. You might eventually arrive, but you've repeated yourself a dozen times and you're starting from scratch at every turn.</p>
+    <p>Or you could use GPS. One pre-loaded map of the entire city. Context that persists from the first turn to the last. A system that knows where you've been, where you're going, and which route fits your constraints. Same destination - completely different journey.</p>
+    <p>Bare Claude is the stranger at the intersection. Archon is the GPS. Both know the roads. Only one remembers the route.</p>
+  </div>
+
+  <p>The deeper principle: in an unstructured Claude workflow, every conversation is an <strong>isolated node</strong> - no edges, no memory, no connection to what came before. In Archon, each session builds on a <strong>shared persistent knowledge layer</strong> - decisions and context from earlier sessions are available to every session that follows. Every session you run adds to the layer. The accumulated context makes the next session smarter.</p>
+
+  <div style="margin: 24px 0 8px;">
+    <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-muted); margin: 20px 0 10px;">Without structure - 3 sessions</div>
+    <div class="dag-visual">
+      <div>
+        <div class="dag-node future">S1</div>
+        <div class="dag-label" style="text-align:center;">Explain<br>everything</div>
+      </div>
+      <div class="dag-edge broken"></div>
+      <div>
+        <div class="dag-node future">S2</div>
+        <div class="dag-label" style="text-align:center;">Explain<br>everything</div>
+      </div>
+      <div class="dag-edge broken"></div>
+      <div>
+        <div class="dag-node future">S3</div>
+        <div class="dag-label" style="text-align:center;">Explain<br>everything</div>
+      </div>
+      <div class="dag-edge broken"></div>
+      <div>
+        <div class="dag-node future">S4</div>
+        <div class="dag-label" style="text-align:center;">Explain<br>everything</div>
+      </div>
+    </div>
+    <br></br>
+    <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 10px;">Your knowledge graph after the same 3 sessions with Archon</div>
+    <div class="dag-visual">
+      <div>
+        <div class="dag-node past">S1</div>
+        <div class="dag-label" style="text-align:center;">Platform<br>context set</div>
+      </div>
+      <div class="dag-edge live"></div>
+      <div>
+        <div class="dag-node past">S2</div>
+        <div class="dag-label" style="text-align:center;">Decisions<br>remembered</div>
+      </div>
+      <div class="dag-edge live"></div>
+      <div>
+        <div class="dag-node active">S3</div>
+        <div class="dag-label" style="text-align:center;">You are<br>here</div>
+      </div>
+      <div class="dag-edge live"></div>
+      <div>
+        <div class="dag-node future">S4</div>
+        <div class="dag-label" style="text-align:center;">Builds on<br>everything</div>
+      </div>
+    </div>
+    <br></br>
+
+  </div>
+
+  <div class="way-compare animate-on-scroll">
+
+    <div class="way-card">
+      <div class="way-header inefficient">
+        <span>✗</span> Default Claude : Session by Session
+      </div>
+      <div class="way-body">
+        <div class="session-chain">
+
+          <div class="session-block bad">
+            <div class="session-label bad">Session 1</div>
+            <div class="session-rows">
+              <span class="pill pill-grey">You type</span>
+              <span class="sr-text">"Here is my platform architecture: the BFF uses a code-first GraphQL library, Neo Extension handles custom APIs, the UI is React/MUI, Capillary is the loyalty engine..."</span>
+              <span class="pill pill-grey">Claude reads</span>
+              <span class="sr-text">your wall of context</span>
+              <span class="pill pill-grey">Output</span>
+              <span class="sr-text">Generic design. "Fetch member data and store in the CRM."</span>
+            </div>
+            <div class="session-verdict bad">✗ Session ends. Everything forgotten.</div>
+          </div>
+          <br></br>
+          <div class="chain-connector broken">
+            <div class="chain-line"></div>
+            <div class="chain-label">NO MEMORY PASSES</div>
+            <div class="chain-line"></div>
+          </div>
+          <div class="session-block bad">
+            <div class="session-label bad">Session 2</div>
+            <div class="session-rows">
+              <span class="pill pill-grey">You type</span>
+              <span class="sr-text">"So as I was saying, my BFF uses a code-first GraphQL library, not Spring GraphQL. Neo uses Basic Auth. MUI only, no raw HTML..."</span>
+              <span class="pill pill-grey">Claude reads</span>
+              <span class="sr-text">the same context again</span>
+              <span class="pill pill-grey">Output</span>
+              <span class="sr-text">slightly better. Still no API contracts, no field mappings.</span>
+            </div>
+            <div class="session-verdict bad">✗ Session ends. You may write an output.md and read in next session. But still there is no set pattern for AI to understand.</div>
+          </div>
+          <br></br>
+          <div class="chain-connector broken">
+            <div class="chain-line"></div>
+            <div class="chain-label">NO MEMORY PASSES </div>
+            <div class="chain-line"></div>
+          </div>
+          <div class="session-block bad">
+            <div class="session-label bad">Session N</div>
+            <div class="session-rows">
+              <span class="pill pill-red">30% of every session</span>
+              <span class="sr-text">is re-explaining context you already explained</span>
+              <span class="pill pill-red">Output quality</span>
+              <span class="sr-text">is capped by what Claude can infer from a rushed summary</span>
+              <span class="pill pill-red">You</span>
+              <span class="sr-text">become the memory system. Claude stays generic.</span>
+            </div>
+            <div class="session-verdict bad">✗ The AI is only as good as your last prompt and generally results into <strong>context bloat</strong>.</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="way-card">
+      <div class="way-header efficient">
+        <span>✓</span> The Persistent Knowledge Layer
+      </div>
+      <div class="way-body">
+        <div class="session-chain">
+
+          <div class="session-block good">
+            <div class="session-label good">Session 1</div>
+            <div class="session-rows">
+              <span class="pill pill-teal">You type</span>
+              <span class="sr-text"><code>APPROACH</code> "new client Acme, building partner points exchange"</span>
+              <span class="pill pill-teal">Archon loads</span>
+              <span class="sr-text">Only the 3 knowledge files relevant to this task (~5% budget)</span>
+              <span class="pill pill-teal">Right agent activates</span>
+              <span class="sr-text">Knows the BFF GraphQL library, Neo Auth, MUI constraints, Capillary APIs</span>
+              <span class="pill pill-gold">Output</span>
+              <span class="sr-text">Full API contracts, field mappings, error codes, Redis key design.</span>
+            </div>
+            <div class="session-verdict good">✓ END_SESSION saves decisions, learning, scope, anti-patterns to memory.</div>
+          </div>
+
+          <div class="chain-connector live">
+            <div class="chain-line"></div>
+            <div class="chain-label">MEMORY PERSISTS - decisions, context, learnings</div>
+            <div class="chain-line"></div>
+          </div>
+
+          <div class="session-block good">
+            <div class="session-label good">Session 2</div>
+            <div class="session-rows">
+              <span class="pill pill-teal">You type</span>
+              <span class="sr-text"><code>GENERATE_LLD</code> for the same feature</span>
+              <span class="pill pill-teal">Archon loads</span>
+              <span class="sr-text">Session 1 decisions + client memory - no re-explaining</span>
+              <span class="pill pill-teal">Picks up</span>
+              <span class="sr-text">Exactly where you left off. Knows what was decided and why.</span>
+              <span class="pill pill-gold">Output</span>
+              <span class="sr-text">LLD that references the ADRs from session 1 without prompting.</span>
+            </div>
+            <div class="session-verdict good">✓ Each session builds on the last. Quality compounds. Efficiency improves.</div>
+          </div>
+
+          <div class="chain-connector live">
+            <div class="chain-line"></div>
+            <div class="chain-label">LIBRARY SELF-HEALS - patterns absorbed</div>
+            <div class="chain-line"></div>
+          </div>
+
+          <div class="session-block good">
+            <div class="session-label good">Session N</div>
+            <div class="session-rows">
+              <span class="pill pill-teal">0% of session</span>
+              <span class="sr-text">Spent re-explaining. Archon already knows your platform.</span>
+              <span class="pill pill-teal">Output quality</span>
+              <span class="sr-text">Improves with every session as patterns and decisions accumulate</span>
+              <span class="pill pill-teal">You</span>
+              <span class="sr-text">Focus on decisions only a human architect can make.</span>
+            </div>
+            <div class="session-verdict good">✓ The AI gets smarter every time you use it. A pattern discovered on Feature A gets applied on Feature B. </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="insight-trio animate-on-scroll">
+    <div class="insight-card">
+      <div class="insight-icon">🚀</div>
+      <div class="insight-title">No Cold Starts</div>
+      <div class="insight-desc">Every session opens with full platform context already loaded. Client details, past decisions, constraints - all ready before you type the first word.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-icon">🎯</div>
+      <div class="insight-title">Right Expert, Every Time</div>
+      <div class="insight-desc">21 specialist agents activate automatically based on your task. You get a BFF expert for BFF work, a migration expert for migration work - not a generalist guessing.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-icon">📈</div>
+      <div class="insight-title">Quality That Compounds</div>
+      <div class="insight-desc">Each session feeds learnings back into the library. A pattern discovered on Client A gets applied on Client B. The system gets measurably better over time.</div>
+    </div>
+  </div>
+
+  <div class="pull-quote">You are not switching to a smarter AI. You are switching to a <em>structured</em> one. The model is the same. What changes is that ARCHON knows your platform before you say a word - and remembers everything you say after.</div>
+
+  <!-- ─── Section: The Problem ─── -->
+  <h2>The Problem: AI Amnesia Meets Enterprise Complexity</h2>
+
+  <p>The Rewards+ Platform is a multi-tenant loyalty marketplace powered by Capillary CRM. It has a BFF gateway (Java/Spring Boot/GraphQL), a custom API layer called Neo Extension (low-code dataflows with MongoDB), a React/MUI frontend, and integrations with half a dozen external systems per client.</p>
+
+  <p>Every time I started a new Claude conversation, I had to re-explain the entire architecture. The BFF uses a code-first GraphQL library, not Spring GraphQL. Neo Extension uses Basic Auth (without padding) generally for BFF integration. The UI must use MUI components exclusively - never raw HTML. Points drift tolerance is 0.01%. And a hundred other details that shape every design decision.</p>
+
+  <div class="pull-quote">A good SDD is the single document a new engineer can read to understand the entire solution. If they have to ask "how does X work?" after reading it, the SDD is incomplete. The same standard should apply to what the AI knows about your platform.</div>
+
+  <p>The SDDs that Claude generated were surface-level - vague data flows, missing API contracts, no field mapping tables, generic error handling. They'd say "the user data is fetched and stored in Capillary" instead of showing the exact API endpoint, request payload, response shape, and error codes.</p>
+
+  <p>The fix wasn't better prompting. It was building a <strong>structured knowledge system</strong> that gives Claude deep, persistent understanding of the platform - and an agent architecture that channels that knowledge into production-quality outputs.</p>
+
+  <!-- ─── Section: What Got Built ─── -->
+  <h2>What Got Built: Archon</h2>
+
+  <p>The final system is a <code>.claude/</code> directory containing 384 files organized into a layered architecture. Drop it into any repository, run <code>claude</code> from the terminal, and you have an architecture partner that knows every API, every data model, and every integration pattern in your platform.</p>
+
+  <div class="dir-tree">
+    <span class="folder">.claude/</span><br>
+    &nbsp;&nbsp;<span class="file">CLAUDE.md</span> <span class="desc">← Master system prompt (auto-loaded)</span><br>
+    &nbsp;&nbsp;<span class="file">settings.json</span> <span class="desc">← Configuration</span><br>
+    <br>
+    &nbsp;&nbsp;<span class="folder">agents/</span> <span class="count">(21)</span> <span class="desc">← Specialist AI agents</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">architecture-agent.md</span> <span class="desc">System design &amp; pattern selection</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">sdd-agent.md</span> <span class="desc">Solution Design Documents</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">migration-agent.md</span> <span class="desc">Legacy migration planning</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">neo-specialist-agent.md</span> <span class="desc">Neo Extension dataflows</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">bff-specialist-agent.md</span> <span class="desc">BFF development (GraphQL, Reactor)</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">estimation-agent.md</span> <span class="desc">Effort estimation</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">communication-agent.md</span> <span class="desc">Client-facing summaries</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="file highlight">doc-writing-agent.md</span> <span class="desc">16 client engagement docs - pre-sales through handover</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="file highlight">...and 13 more</span><br>
+    <br>
+    &nbsp;&nbsp;<span class="folder">debate_agents/</span> <span class="count">(6)</span> <span class="desc">← Multi-perspective architecture debate</span><br>
+    &nbsp;&nbsp;<span class="folder">commands/</span> <span class="count">(39)</span> <span class="desc">← Executable command definitions</span><br>
+    &nbsp;&nbsp;<span class="folder">workflows/</span> <span class="count">(7)</span> <span class="desc">← Multi-step orchestrations</span><br>
+    &nbsp;&nbsp;<span class="folder">architecture_patterns/</span> <span class="count">(18)</span> <span class="desc">← Reusable patterns with tradeoffs</span><br>
+    &nbsp;&nbsp;<span class="folder">risk_engine/</span> <span class="count">(3)</span> <span class="desc">← Risk prediction &amp; scoring</span><br>
+    &nbsp;&nbsp;<span class="folder">templates/</span> <span class="count">(15)</span> <span class="desc">← Architecture &amp; spec templates (SDD, LLD, ADR, runbooks)</span><br>
+    &nbsp;&nbsp;<span class="folder highlight">templates/client-docs/</span> <span class="count">(17)</span> <span class="desc">← 16 client engagement templates + 1 theme spec (_THEME.md)</span><br>
+    &nbsp;&nbsp;<span class="folder">memory/</span> <span class="count">(18)</span> <span class="desc">← Persistent decisions, learnings, per-client context, archival policy, backlog system</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder highlight">backlog/</span> <span class="count">(5)</span> <span class="desc">BL-index, BL-global, BL-client, BL-feature, BL-vendor</span><br>
+    &nbsp;&nbsp;<span class="folder">learning/</span> <span class="count">(3)</span> <span class="desc">← Knowledge update &amp; session close protocols</span><br>
+    &nbsp;&nbsp;<span class="folder">prompts/</span> <span class="count">(2)</span> <span class="desc">← 20 copy-paste starter prompts</span><br>
+    <br>
+    &nbsp;&nbsp;<span class="folder">knowledge/</span> <span class="count">(219)</span> <span class="desc">← Complete platform knowledge base</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">types/</span> <span class="count">(16)</span> <span class="desc">Data models - member, transaction, points, tier...</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">skills/</span> <span class="count">(23)</span> <span class="desc">Reference guides - BFF, Neo, Capillary APIs, UI</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">subskills/</span> <span class="count">(50)</span> <span class="desc">Step-by-step procedures</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">instructions/</span> <span class="count">(16)</span> <span class="desc">Phase execution plans</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">guiders/</span> <span class="count">(23)</span> <span class="desc">Best practices, Redis ops, API versioning, schema evolution</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">checkers/</span> <span class="count">(13)</span> <span class="desc">Quality gates - SDD completeness, security, go-live</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">_fragments/</span> <span class="count">(45)</span> <span class="desc">Code snippets - 50-80 tokens each</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">brand/</span> <span class="desc">Capillary logo, brand identity, per-client brand themes</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="file highlight">...and more</span><br>
+    <br>
+    &nbsp;&nbsp;<span class="folder">_context-loads/</span> <span class="count">(29)</span> <span class="desc">← Token-efficient loading recipes (29 profiles mapped to task types)</span><br>
+    &nbsp;&nbsp;<span class="folder">_index/</span> <span class="count">(2)</span> <span class="desc">← Registry for finding files</span><br>
+    &nbsp;&nbsp;<span class="folder">_glossary/</span> <span class="count">(1)</span> <span class="desc">← Machine-readable term definitions</span><br>
+    &nbsp;&nbsp;<span class="folder">_changelog/</span> <span class="count">(1)</span> <span class="desc">← System version history</span><br>
+    &nbsp;&nbsp;<span class="folder">_workspace/</span> <span class="count">(2)</span> <span class="desc">← Chunked output &amp; resume</span><br>
+  </div>
+
+  <!-- ─── Section: Architecture Layers Overview ─── -->
+  <h2>How the Layers Fit Together</h2>
+
+  <p>The 384 files are not just a collection - they form a structured seven-layer architecture where each layer depends on the ones below it. The token optimization system (Layer 0) controls which knowledge is loaded; from there, knowledge flows up through agents, commands, and templates to produce the final client deliverable.</p>
+
+  <div style="margin:32px 0;font-family:'DM Sans',sans-serif;">
+    <div style="display:flex;flex-direction:column;gap:4px;max-width:720px;">
+
+      <div style="display:flex;align-items:stretch;gap:0;">
+        <div style="width:28px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--ink-muted);writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);padding:4px 0;letter-spacing:0.06em;text-transform:uppercase;">OUTPUT</div>
+        <div style="flex:1;background:#1a1a2e;border-radius:6px 6px 0 0;padding:14px 20px;color:#fff;">
+          <span style="font-weight:700;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;color:rgba(255,255,255,0.5);">Layer 6 - Output</span>
+          <div style="margin-top:4px;font-size:14px;color:rgba(255,255,255,0.85);">output/{client}/ &nbsp;·&nbsp; sdd/ &nbsp;·&nbsp; lld/ &nbsp;·&nbsp; specs/ &nbsp;·&nbsp; adr/ &nbsp;·&nbsp; pre-sales/ &nbsp;·&nbsp; pm/ &nbsp;·&nbsp; post-golive/</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:stretch;gap:0;">
+        <div style="width:28px;"></div>
+        <div style="flex:1;background:#16213e;padding:14px 20px;color:#fff;">
+          <span style="font-weight:700;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;color:rgba(255,255,255,0.45);">Layer 5 - Templates</span>
+          <div style="margin-top:4px;font-size:14px;color:rgba(255,255,255,0.8);">15 architecture templates (SDD, LLD, ADR, runbook) &nbsp;·&nbsp; 17 client-doc templates &nbsp;·&nbsp; per-client brand themes</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:stretch;gap:0;">
+        <div style="width:28px;"></div>
+        <div style="flex:1;background:#0f3460;padding:14px 20px;color:#fff;">
+          <span style="font-weight:700;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;color:rgba(255,255,255,0.45);">Layer 4 - Persistence</span>
+          <div style="margin-top:4px;font-size:14px;color:rgba(255,255,255,0.8);">memory/projects/{client}/ &nbsp;·&nbsp; architecture-decisions.md &nbsp;·&nbsp; session/active-session.md &nbsp;·&nbsp; session/recovery/ &nbsp;·&nbsp; estimation-calibration.md</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:stretch;gap:0;">
+        <div style="width:28px;"></div>
+        <div style="flex:1;background:rgba(13,148,136,0.12);border:1px solid rgba(13,148,136,0.25);padding:14px 20px;">
+          <span style="font-weight:700;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;color:var(--teal);">Layer 3 - Commands</span>
+          <div style="margin-top:4px;font-size:14px;color:var(--ink-soft);">39 command definitions &nbsp;·&nbsp; APPROACH, GENERATE_SDD, RUN_DEBATE, END_SESSION, GENERATE_CLIENT_DOC, ARCH_DIAGRAM, LOG_BACKLOG, RUN_WORKFLOW...</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:stretch;gap:0;">
+        <div style="width:28px;"></div>
+        <div style="flex:1;background:rgba(232,93,38,0.08);border:1px solid rgba(232,93,38,0.2);padding:14px 20px;">
+          <span style="font-weight:700;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;color:var(--accent);">Layer 2 - Agent</span>
+          <div style="margin-top:4px;font-size:14px;color:var(--ink-soft);">21 specialist agents &nbsp;·&nbsp; 6 debate agents &nbsp;·&nbsp; risk engine &nbsp;·&nbsp; 3 orchestration DAGs (migration-full, bff-feature, tenant-onboarding)</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:stretch;gap:0;">
+        <div style="width:28px;"></div>
+        <div style="flex:1;background:var(--surface-warm);border:1px solid var(--border);padding:14px 20px;">
+          <span style="font-weight:700;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;color:var(--ink-soft);">Layer 1 - Knowledge</span>
+          <div style="margin-top:4px;font-size:14px;color:var(--ink-soft);">219 files &nbsp;·&nbsp; types, skills, subskills, instructions, guiders, checkers (13), eval-rules (8), fragments (45), architecture patterns (18)</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:stretch;gap:0;">
+        <div style="width:28px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--ink-muted);writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);padding:4px 0;letter-spacing:0.06em;text-transform:uppercase;">CONTROL</div>
+        <div style="flex:1;background:var(--surface-code);border-radius:0 0 6px 6px;padding:14px 20px;color:#fff;">
+          <span style="font-weight:700;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;color:rgba(255,255,255,0.45);">Layer 0 - Orchestration</span>
+          <div style="margin-top:4px;font-size:14px;color:rgba(255,255,255,0.8);">CLAUDE.md dispatch rules &nbsp;·&nbsp; startup sequence &nbsp;·&nbsp; REGISTRY-QUICK → SELECTOR → LOAD profile &nbsp;·&nbsp; session-close protocol &nbsp;·&nbsp; decision checkpoint gates</div>
+        </div>
+      </div>
+
+    </div>
+    <p style="font-size:12px;color:var(--ink-muted);margin-top:12px;">Layer 0 controls what gets loaded; Layers 1–2 reason over it; Layers 3–4 structure and remember it; Layers 5–6 turn it into client deliverables. Claude Code's native tool layer (file I/O, bash, search) sits below Layer 0 and is provided by the platform - Archon does not reinvent it.</p>
+  </div>
+
+  <!-- ─── Section: Knowledge Layer ─── -->
+  <h2>Layer 1: The Knowledge Base (219 Files)</h2>
+
+  <p>The foundation is a structured knowledge base organized into 10 file types. Each type serves a different purpose in the architecture reasoning process:</p>
+
+  <div class="card-grid animate-on-scroll">
+    <div class="card">
+      <div class="card-icon orange">📋</div>
+      <h4>Types (16)</h4>
+      <p>Data dictionaries for every entity - Member (20 fields), Transaction, Points Ledger, Tier, Neo Dataflow, BFF GraphQL models. Source → Capillary → Response field mappings.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon teal">📖</div>
+      <h4>Skills (23)</h4>
+      <p>Comprehensive reference guides per system - Capillary Marvel, CDP, Loyalty Engine, Engage+, Connect+, Insights+, Intouch, Neo Extension, BFF Development, UI Development, Data Ingestion, and more.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon blue">🔧</div>
+      <h4>Subskills (50)</h4>
+      <p>Step-by-step procedures - "Add a GraphQL query", "Create a Neo dataflow", "Design an Engage+ journey", "Set up Connect+ import", "Build a UI component". Numbered steps with inputs and outputs.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon gold">💡</div>
+      <h4>Guiders (23)</h4>
+      <p>Best practices and warnings - 16 migration pitfalls, BFF reactive anti-patterns, Neo design patterns, SDD writing quality standards, incident response playbooks.</p>
+    </div>
+  </div>
+
+  <div class="card-grid animate-on-scroll">
+    <div class="card">
+      <div class="card-icon orange">📋</div>
+      <h4>Instructions (16)</h4>
+      <p>Phase execution plans with entry/exit criteria - 6 implementation phases, 6 migration phases, cutover runbook (minute-by-minute T-7 to T+3).</p>
+    </div>
+    <div class="card">
+      <div class="card-icon teal">✅</div>
+      <h4>Checkers (13)</h4>
+      <p>Quality gate checklists - Go-live readiness (46 gates), pre-migration, post-load, points reconciliation, BFF health, API integration health.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon blue">📏</div>
+      <h4>Eval Rules (8)</h4>
+      <p>Quantitative metrics with GREEN/AMBER/RED thresholds - member mapping ≥99.9%, points drift ≤0.01%, tier accuracy ≥99.99%, BFF contract 100%.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon gold">✂️</div>
+      <h4>Fragments (45)</h4>
+      <p>Atomic code snippets - 50-80 tokens each. BFF GraphQL annotation, WebClient pattern, Neo Script header, Redis cache-aside, Engage+ triggers, Connect+ CSV format, loyalty earn rules. 95% cheaper than loading a full skill file.</p>
+    </div>
+  </div>
+
+  <p>The knowledge covers the <strong>entire Capillary platform</strong> in depth - not just the BFF and Neo Extension, but every product an SA works with day-to-day:</p>
+
+  <div class="table-wrap animate-on-scroll">
+    <table>
+      <thead><tr><th>Capillary Product</th><th>What It Does</th><th>Coverage Depth</th></tr></thead>
+      <tbody>
+        <tr><td>Marvel</td><td>Rewards catalog - offers, coupons, vendors, milestones</td><td>Skill + subskills + fragments</td></tr>
+        <tr><td>CDP</td><td>Customer data - profiles, cards, events, extended fields</td><td>Skill + subskills + fragments</td></tr>
+        <tr><td>Loyalty+</td><td>Rules engine - earn, burn, tier, expiry, milestones, promotions</td><td>Skill + 4 rule subskills + earn rule fragment</td></tr>
+        <tr><td>Engage+</td><td>Communications - email, SMS, push, WhatsApp, journeys, campaigns</td><td>Skill + journey design + subscription setup + trigger fragment</td></tr>
+        <tr><td>Connect+</td><td>Data import - SFTP/CSV bulk ingestion into CDP</td><td>Skill + customer import + transaction import + CSV format</td></tr>
+        <tr><td>Insights+</td><td>Reporting - dashboards, KPIs, data exports</td><td>Skill + report extraction subskill</td></tr>
+        <tr><td>Intouch</td><td>Business portal - configuration, campaigns, segments, agent tools</td><td>Skill (business user workflows)</td></tr>
+        <tr><td>Neo Extension</td><td>Custom APIs - low-code dataflows, MongoDB, Script blocks</td><td>Skill + 4 subskills + 8 fragments + specialist agent</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>The <strong>Capillary Specialist Agent</strong> knows the product interaction map - how CDP feeds the Loyalty Engine, how loyalty events trigger Engage+ journeys, how Connect+ bulk-loads data into CDP, and how the BFF orchestrates Marvel + CDP + Neo for the mobile app. When you ask it to design a feature, it knows which products are involved and loads only their knowledge files.</p>
+
+  <!-- ─── Section: Token Optimization ─── -->
+  <h2>Token Optimization: The 5% Rule</h2>
+
+  <p>Here's the engineering problem: Claude has a ~200K token context window. The full knowledge base is ~130K tokens. Loading everything would consume 65% of the context, leaving only 35% for actual reasoning and output. That produces shallow, truncated results.</p>
+
+  <p>The solution is a three-tier loading system:</p>
+
+  <div class="feature-block animate-on-scroll">
+    <h4>Registry → Selector → Context-Load <span class="tag tag-orange">Token Architecture</span></h4>
+    <ol class="step-list">
+      <li><strong>REGISTRY-QUICK.md</strong> (~1.5K tokens) - The lean startup index: file names and categories only. Claude reads this first to know what exists without loading anything. The full <strong>REGISTRY.md</strong> (~5.5K tokens) is reserved for SEARCH_LIBRARY and MAP_DEPENDENCIES - loaded on demand, never at startup.</li>
+      <li><strong>SELECTOR.md</strong> (~300 tokens) - A task-matching table: "If your task is X, load profile Y." Maps 26 common tasks to their optimal file sets.</li>
+      <li><strong>LOAD-*.md profiles</strong> (~200 tokens each) - Pre-computed "shopping lists" capping at 8-12K tokens. "Add GraphQL query" loads 4 specific files. "Write SDD" loads 4 different files.</li>
+      <li><strong>Fragments</strong> (~50-80 tokens each) - When you just need one code pattern (a GraphQL annotation, a WebClient call), load a fragment instead of a 1,500-token skill file. That's a 95% token savings per pattern.</li>
+    </ol>
+    <p style="margin-top:16px;margin-bottom:0;"><strong>Result:</strong> Knowledge consumption drops from 65% → 5% of the context window. The remaining 80% is available for deep reasoning, long document generation, and multi-agent analysis.</p>
+    <p style="margin-top:12px;margin-bottom:0;"><strong>Platform isolation:</strong> Declare your platform at session start (<code>Platform: rewards-plus</code> / <code>capillary-core</code> / <code>generic</code>) and the SELECTOR filters out irrelevant knowledge files automatically - no manual pruning needed. A non-Rewards+ engagement won't load Rewards+-specific types or patterns.</p>
+  </div>
+
+  <div class="table-wrap animate-on-scroll">
+    <table>
+      <thead><tr><th>Approach</th><th>Tokens Used</th><th>% of Context</th><th>Left for Work</th></tr></thead>
+      <tbody>
+        <tr><td>Load entire library</td><td>~130K</td><td>65%</td><td>~70K (bad)</td></tr>
+        <tr><td>Context-load profiles (simple task, no client memory)</td><td>~10K</td><td>5%</td><td>~190K (great)</td></tr>
+        <tr><td>Context-load profiles (full SDD + mature client memory)</td><td>~16–19K</td><td>8–9.5%</td><td>~181K (good)</td></tr>
+        <tr><td>Fragments only</td><td>~500</td><td>0.25%</td><td>~199K (best for simple tasks)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ─── Section: Agents ─── -->
+  <h2>Layer 2: The Agent System (21 Specialists + 6 Debate Agents)</h2>
+
+  <p>Each agent is a markdown file containing a role description, reasoning strategy, input expectations, output format, and - critically - <strong>which knowledge files to load</strong>. When a task arrives, the right agent activates and loads only its relevant files.</p>
+
+  <div class="table-wrap animate-on-scroll">
+    <table>
+      <thead><tr><th>Agent</th><th>What It Does</th><th>Files It Loads</th></tr></thead>
+      <tbody>
+        <tr><td>sdd-agent</td><td>Generates 30-80 page SDDs with full API contracts and field mappings</td><td>3 SDD templates + quality guider</td></tr>
+        <tr><td>migration-agent</td><td>Plans extraction → transform → load with parallel streams and reconciliation</td><td>6 phase instructions + pitfalls guider + eval rules</td></tr>
+        <tr><td>neo-specialist</td><td>Designs Neo dataflows, MongoDB schemas, Script blocks, Dev Console config</td><td>Neo skill + 2 type files + design patterns guider</td></tr>
+        <tr><td>bff-specialist</td><td>Implements GraphQL queries (code-first library), WebClient calls, Redis caching</td><td>BFF skill + GraphQL/REST types + fragments</td></tr>
+        <tr><td>review-agent</td><td>7-dimension architecture review (scalability, security, cost...)</td><td>Risk engine + security guider + go-live checker</td></tr>
+        <tr><td>risk-analysis</td><td>8-category risk scoring with migration-specific detection</td><td>Risk engine + categories + migration detector</td></tr>
+        <tr><td>ui-spec-agent</td><td>21-section UI developer specifications (React/MUI/Redux/WCAG AA)</td><td>UI skill + tech stack type + spec template</td></tr>
+        <tr><td>estimation-agent</td><td>Effort estimation - T-shirt → story points → calendar days</td><td>Relevant knowledge per scope</td></tr>
+        <tr><td>data-modelling-agent</td><td>Entity design, Capillary extended fields, MongoDB schemas, Redis keys</td><td>Type files + Neo config + CDP skill</td></tr>
+        <tr><td>communication-agent</td><td>Client-facing summaries, status updates, executive briefs</td><td>Client management guider + project memory</td></tr>
+        <tr><td>dependency-mapping-agent</td><td>System dependencies, blast radius, change impact analysis</td><td>Org config + tenant config + BFF skill</td></tr>
+        <tr><td><strong>doc-writing-agent</strong></td><td><strong>16 client engagement docs - discovery questionnaire through handover document. Pre-sales to post-go-live. Not architecture docs.</strong></td><td>16 CLIENTDOC templates + _THEME + client project memory + doc patterns</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Architecture Debate System (6 Debate Agents)</h3>
+
+  <p>For major design decisions, 5 perspective agents evaluate the architecture from different angles - then a 6th agent, the Decision Synthesizer, produces the final recommendation:</p>
+
+  <div class="card-grid animate-on-scroll">
+    <div class="card">
+      <div class="card-icon teal">🏛️</div>
+      <h4>Conservative</h4>
+      <p>"Do we really need this complexity? Could a simpler architecture achieve the same goals?"</p>
+    </div>
+    <div class="card">
+      <div class="card-icon orange">📈</div>
+      <h4>Scalability</h4>
+      <p>"What breaks when we get 10x more traffic? Where are the bottlenecks?"</p>
+    </div>
+    <div class="card">
+      <div class="card-icon gold">💰</div>
+      <h4>Cost Efficiency</h4>
+      <p>"Are we spending $10 to solve a $1 problem? Could a simpler solution work?"</p>
+    </div>
+    <div class="card">
+      <div class="card-icon blue">🛡️</div>
+      <h4>Stability</h4>
+      <p>"What happens when this breaks at 3 AM? Is there a runbook? A fallback?"</p>
+    </div>
+    <div class="card">
+      <div class="card-icon orange">💡</div>
+      <h4>Innovation</h4>
+      <p>"What if we approached this completely differently? Sometimes the conventional solution isn't the best one - is there a simpler, more elegant path we haven't considered?"</p>
+    </div>
+  </div>
+
+  <p>The <strong>Decision Synthesizer</strong> reads all 5 evaluations, identifies consensus and conflicts, weighs tradeoffs against project context, and produces a final recommendation with a formal Architecture Decision Record (ADR). Use a solo perspective agent for a quick sanity check; use <code>RUN_DEBATE</code> when a decision is genuinely contested.</p>
+
+  <h3>18 Architecture Patterns - Including Resilience</h3>
+
+  <p>Beyond structural patterns (BFF, Strangler, CQRS, DDD, Hexagonal, Modular Monolith), Archon includes four resilience patterns that are critical for a multi-tenant platform calling external APIs:</p>
+
+  <div class="card-grid animate-on-scroll">
+    <div class="card">
+      <div class="card-icon orange">⚡</div>
+      <h4>Circuit Breaker</h4>
+      <p>When Capillary is down, fail fast and serve from Redis cache instead of letting timeouts cascade. Includes Resilience4j code patterns with per-dependency fallbacks.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon teal">🔄</div>
+      <h4>Retry with Backoff</h4>
+      <p>Exponential backoff with jitter for transient failures. Includes a decision matrix: retry 5xx and timeouts, never retry 400s. Code for both BFF Reactor and Python batch scripts.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon blue">🚢</div>
+      <h4>Bulkhead</h4>
+      <p>Isolate failures per tenant and per dependency with separate connection pools. One bad tenant's traffic spike doesn't exhaust the pool for everyone else.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon gold">📤</div>
+      <h4>Transactional Outbox</h4>
+      <p>Guarantee event delivery by writing to a local outbox collection in the same Neo dataflow as the business write. A separate scheduled flow publishes to Kafka.</p>
+    </div>
+  </div>
+
+  <h3>Quality Gates: SDD Completeness + Security Review</h3>
+
+  <p>Two machine-checkable checklists ensure output quality before client sign-off. The <strong>SDD Completeness Checker</strong> verifies every feature section has API samples, field mapping tables, business rules, and error handling. The <strong>Security Review Checker</strong> walks through OWASP Top 10, secrets management, tenant isolation, and data privacy - every checkbox must pass.</p>
+
+  <h3>Templates for Every Deliverable</h3>
+
+  <p>Beyond SDDs and LLDs, Archon includes templates for <strong>Integration Design Documents</strong> (deep-dive on a single integration with SLA and circuit breaker config), <strong>Post-Migration Reports</strong> (volumes, quality metrics, issues, lessons learned), and <strong>Operational Runbooks</strong> (health checks, common alerts, emergency procedures, contact lists).</p>
+
+  <h3>Starter Prompts: 20 Ready-to-Use Templates</h3>
+
+  <p>New users don't need to figure out how to phrase requests. The <code>prompts/STARTER-PROMPTS.md</code> file contains 20 copy-paste prompts covering every common SA task - from SDD generation to effort estimation to dependency impact analysis. Fill in the blanks and go.</p>
+
+  <!-- ─── Section: Commands ─── -->
+  <h2>Layer 3: The Command System (39 Commands)</h2>
+
+  <p>Commands are shortcut triggers that activate the right agents, load the right knowledge, and produce structured output. Instead of explaining what you want from scratch, you issue a command and provide context:</p>
+
+  <div class="code-block">
+    <span class="code-label">Terminal</span>
+    <span class="dim">$</span> <span class="keyword">claude</span><br><br>
+    <span class="accent">&gt;</span> <span class="keyword">GENERATE_SDD</span><br>
+    <span class="accent">&gt;</span><br>
+    <span class="accent">&gt;</span> <span class="string">Client Alpha is a retail loyalty program. 500K members,</span><br>
+    <span class="accent">&gt;</span> <span class="string">2M transactions/month. SAP POS, Salesforce CRM.</span><br>
+    <span class="accent">&gt;</span> <span class="string">Features: member registration, points earn, tier mgmt,</span><br>
+    <span class="accent">&gt;</span> <span class="string">offer redemption, push notifications.</span><br>
+    <span class="accent">&gt;</span><br>
+    <span class="accent">&gt;</span> <span class="string">Client: acme-retail</span><br><br>
+    <span class="comment">// Claude activates sdd-agent → loads templates → generates</span><br>
+    <span class="comment">// a 40-page SDD with full API contracts, field mappings,</span><br>
+    <span class="comment">// business rules, error handling → writes directly to file</span>
+  </div>
+
+  <div class="table-wrap animate-on-scroll">
+    <table>
+      <thead><tr><th>Command</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td colspan="2" style="background:var(--surface-code);color:#89b4fa;font-weight:600;font-size:11px;padding:6px 12px;letter-spacing:0.05em;">CONTEXT &amp; SETUP - run first for any new engagement or feature</td></tr>
+        <tr><td><strong>APPROACH</strong></td><td><strong>Smart pre-step orchestrator - parses intent, loads or creates client and feature context, routes to sub-commands, tells you exactly what to run next</strong></td></tr>
+        <tr><td>CREATE_CLIENT</td><td>Set up a new client - memory file, brand theme, output structure, contacts, constraints</td></tr>
+        <tr><td>CREATE_FEATURE</td><td>Create a feature context brief - systems, API scope, artifacts needed, dependencies, open questions</td></tr>
+        <tr><td>UPDATE_CLIENT</td><td>Update existing client - contacts, timeline, scope changes, quirks, decisions, issues</td></tr>
+        <tr><td>UPDATE_FEATURE</td><td>Update existing feature - status progression, decisions, answered questions, artifact tracking</td></tr>
+        <tr><td>ANALYZE</td><td>Multi-mode analysis - client state, feature readiness, gap analysis, document review, risk surface</td></tr>
+        <tr><td colspan="2" style="background:var(--surface-code);color:#89b4fa;font-weight:600;font-size:11px;padding:6px 12px;letter-spacing:0.05em;">ARCHITECTURE &amp; DESIGN</td></tr>
+        <tr><td>GENERATE_SDD</td><td>Generate a 30-80 page Solution Design Document</td></tr>
+        <tr><td>GENERATE_LLD</td><td>Generate a Low-Level Design document</td></tr>
+        <tr><td>RUN_ARCH_REVIEW</td><td>7-dimension architecture quality review</td></tr>
+        <tr><td>RUN_RISK_ANALYSIS</td><td>8-category risk scoring with mitigations</td></tr>
+        <tr><td>RUN_DEBATE</td><td>5-perspective architecture debate + synthesis</td></tr>
+        <tr><td>CREATE_DEV_SPEC</td><td>Backend developer specification</td></tr>
+        <tr><td>CREATE_UI_SPEC</td><td>21-section UI specification (React/MUI/WCAG)</td></tr>
+        <tr><td>CREATE_QA_SPEC</td><td>QA test specification (functional + performance + security)</td></tr>
+        <tr><td>ANALYZE_CODEBASE</td><td>Analyze code for patterns and anti-patterns</td></tr>
+        <tr><td>START_POC</td><td>Design a Proof of Concept</td></tr>
+        <tr><td>ARCHITECT_MODE</td><td>Enter full system design mode</td></tr>
+        <tr><td>RUN_MULTI_AGENT_ANALYSIS</td><td>Parallel analysis across all review agents</td></tr>
+        <tr><td>ARCH_DIAGRAM</td><td>Generate Mermaid diagrams for any flow, feature, or client - all 20+ diagram types (flowchart, sequence, C4, ER, Gantt, mindmap, sankey, and more)</td></tr>
+        <tr><td><strong>GENERATE_CLIENT_DOC</strong></td><td><strong>Generate any of 16 client engagement docs - questionnaire, briefing, MVP definition, RAID log, integration guide, handover, and more</strong></td></tr>
+        <tr><td><strong>END_SESSION</strong></td><td><strong>Close any session - 3-track session-close maintenance protocol (client memory + library evolution + doc backlog). Auto-fires after 8 turns, document generation, or decision made.</strong></td></tr>
+        <tr><td><strong>UPDATE_ARCHON_DOC</strong></td><td><strong>Sync this post and setup guide from the archon-doc-backlog - applies pending entries, marks as applied</strong></td></tr>
+        <tr><td>UPDATE_LEARNING</td><td>Store a single architectural learning to the library (mid-session)</td></tr>
+        <tr><td>LOAD_DOCUMENTATION</td><td>Ingest external docs (PDF, code, Confluence) into the knowledge base</td></tr>
+        <tr><td colspan="2" style="background:var(--surface-code);color:#89b4fa;font-weight:600;font-size:11px;padding:6px 12px;letter-spacing:0.05em;">LIBRARY UTILITIES - search, health, and maintenance</td></tr>
+        <tr><td><strong>ARCHON</strong></td><td><strong>Master help command - all 39 commands, 27 agents, 29 profiles, capabilities, and examples. The --help of Archon. Run when unsure what to use next.</strong></td></tr>
+        <tr><td>SEARCH_LIBRARY</td><td>Search 219 knowledge files by keyword, type, platform, or staleness - near-zero token cost. Flags: --type, --platform, --stale, --list-all</td></tr>
+        <tr><td>HEALTH_CHECK</td><td>8-check library scan: stale knowledge, memory budgets, doc backlog, estimation gaps, dependency map, content quality, library integrity, backlog health (P0/stale/unowned). Flag: --bl for backlog only.</td></tr>
+        <tr><td>MAP_DEPENDENCIES</td><td>Generate knowledge dependency map; single-file impact analysis before editing any knowledge file. Flags: --stale (orphaned files), --reverse</td></tr>
+        <tr><td>MINE_PATTERNS</td><td>Mine cross-client patterns from memory/projects/*/*.md and backlog files - surfaces recurring risks, vendor limitations, estimation calibration, domain insights. Flag: --backlog for vendor pattern mining.</td></tr>
+        <tr><td>RESUME_OUTPUT</td><td>Resume an interrupted large artifact (SDD, LLD, spec) from its last completed chunk in _workspace/</td></tr>
+        <tr colspan="2" style="background:var(--surface-code);color:#89b4fa;font-weight:600;font-size:11px;padding:6px 12px;letter-spacing:0.05em;"><td colspan="2" style="background:var(--surface-code);color:#89b4fa;font-weight:600;font-size:11px;padding:6px 12px;letter-spacing:0.05em;">BACKLOG MANAGEMENT - track deferred work, gaps, and vendor limitations across all levels</td></tr>
+        <tr><td><strong>LOG_BACKLOG</strong></td><td><strong>Add a backlog item at any level - global, client, feature, or vendor. Assigns BL-NNN ID. Auto-called by END_SESSION Step A5 to extract session backlog items.</strong></td></tr>
+        <tr><td>VIEW_BACKLOG</td><td>Read-only backlog dashboard - all levels with filtering by priority (--p0, --p1), status (--open, --blocked), staleness (--stale), and scope (--client, --feature, --vendor)</td></tr>
+        <tr><td>TRIAGE_BACKLOG</td><td>Structured review session - reprioritise, assign owners, set target dates, escalate, or close items inline. Modes: --quick (P0+blocked), --p0 (emergency), --stale</td></tr>
+        <tr><td>CLOSE_BACKLOG</td><td>Resolve or defer backlog items. Captures resolution description and optional learning. Bulk mode: --bulk. Updates BL-index and all cross-references.</td></tr>
+        <tr><td colspan="2" style="background:var(--surface-code);color:#89b4fa;font-weight:600;font-size:11px;padding:6px 12px;letter-spacing:0.05em;">CLIENT ENGAGEMENT (additional) - estimation and workflow orchestration</td></tr>
+        <tr><td>CLOSE_TICKET</td><td>Record actuals against estimates - closes the estimation calibration loop; supports sprint-close bulk mode</td></tr>
+        <tr><td>RUN_WORKFLOW</td><td>Step through an _orchestrator/ DAG - phase tracking, parallel stream coordination, worker handoff generation</td></tr>
+        <tr><td><strong>CONTINUE_LAST_SESSION</strong></td><td><strong>Resume an interrupted session - reads Stop-hook recovery file, reloads client/feature context, shows in-progress artifacts and decisions, asks what to continue</strong></td></tr>
+        <tr><td><strong>TO_DOCX</strong></td><td><strong>Convert any markdown doc to enterprise DOCX - runs templates/docx/generate_docx.py; applies all 7 DOCX rules + Mermaid diagram rendering automatically; works for SDD, LLD, spec, or any client doc</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ─── Section: Client Engagement ─── -->
+  <h2>Layer 4: Client Engagement Documents (16 Templates, 2 Themes)</h2>
+
+  <p>Architecture is only half the SA job. The other half is the paperwork - discovery questionnaires, MVP definitions, RAID logs, integration guides, handover documents. Archon covers the full engagement lifecycle with 16 purpose-built document templates across 6 phases.</p>
+
+  <div class="card-grid animate-on-scroll">
+    <div class="card">
+      <div class="card-icon orange">🔍</div>
+      <h4>Pre-Sales + Discovery</h4>
+      <p>Discovery questionnaire, pre-call briefing, session notes, solution proposal brief. Captures requirements, documents decisions, and shapes the proposal before a line of code is written.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon teal">📋</div>
+      <h4>Project Management</h4>
+      <p>MVP definition, kickoff agenda, RAID log, weekly status reports, meeting notes. Everything needed to run a clean, tracked engagement from kickoff to cutover.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon blue">🔗</div>
+      <h4>Implementation</h4>
+      <p>Integration guides and onboarding checklists. Navy technical theme. Every endpoint, header, sample, and client action item - written for the developer reading it at midnight.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon gold">🚀</div>
+      <h4>UAT + Post Go-Live</h4>
+      <p>UAT test plan, go-live readiness checklist, launch communication, hypercare report, and formal handover document. From final sign-off to BAU transition.</p>
+    </div>
+  </div>
+
+  <p>Two visual themes ship out of the box. <strong>Teal (commercial)</strong> for business-facing docs - status reports, RAID logs, MVP definitions. <strong>Navy (technical)</strong> for developer-facing integration guides and onboarding checklists. The <code>doc-writing-agent</code> selects the right theme automatically based on document type.</p>
+
+  <div class="code-block">
+    <span class="code-label">Claude Code</span>
+    <span class="accent">&gt;</span> <span class="keyword">GENERATE_CLIENT_DOC</span> mvp-definition <span class="keyword">for</span> acme-retail<br><br>
+    <span class="comment">// doc-writing-agent activates</span><br>
+    <span class="comment">// loads memory/projects/acme-retail/acme-retail.md - pre-fills known facts, skips repeat questions</span><br>
+    <span class="comment">// checks doc-template-evolution.md for approved template improvements</span><br>
+    <span class="comment">// asks 3-5 clarifying questions specific to MVP definition</span><br>
+    <span class="comment">// generates complete document: assumptions, dependencies,</span><br>
+    <span class="comment">// due dates, and critical callouts per component</span><br><br>
+    <span class="string">Written to: output/acme-retail/pm/mvp-definition-v1.md</span>
+  </div>
+
+  <!-- ─── Section: Execution Flow ─── -->
+  <h2>How Execution Actually Works</h2>
+
+  <p>When you type a command like <code>GENERATE_SDD</code>, here's the exact chain of operations that fires - from your prompt to a 50-page file on disk. This is where the architecture earns its keep.</p>
+
+  <div class="flow-diagram animate-on-scroll">
+
+    <!-- ── PHASE A: INTAKE ── -->
+    <div class="flow-phase-label">A - Intake</div>
+
+    <div class="flow-stage">
+      <div class="flow-node flow-node-user">
+        <div class="flow-node-icon">⌨️</div>
+        <div class="flow-node-content">
+          <div class="flow-node-label">You</div>
+          <div class="flow-node-title">Issue Command or Free-Form Request</div>
+          <div class="flow-node-detail">
+            <code>APPROACH</code> "new client Acme, building partner points exchange"
+            &nbsp;·&nbsp; <code>GENERATE_SDD</code> &nbsp;·&nbsp; <code>ANALYZE acme-retail</code>
+            &nbsp;·&nbsp; <code>GENERATE_CLIENT_DOC mvp-definition</code>
+          </div>
+        </div>
+      </div>
+      <div class="flow-arrow">
+        <svg width="40" height="48" viewBox="0 0 40 48"><path d="M20 0 L20 36 M10 28 L20 40 L30 28" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <!-- ── PHASE B: CONTEXT RESOLUTION (conditional) ── -->
+    <div class="flow-phase-label">B - Context Resolution (conditional routing)</div>
+
+    <div class="flow-stage">
+      <div class="flow-node flow-node-router">
+        <div class="flow-node-icon">🧭</div>
+        <div class="flow-node-content">
+          <div class="flow-node-label">APPROACH - Smart Router</div>
+          <div class="flow-node-title">Reads intent - routes to the right setup path - asks only what's missing</div>
+          <div class="flow-router-branches">
+            <div class="flow-branch-if">
+              <div class="flow-branch-cond">IF new client</div>
+              <div class="flow-branch-action">→ CREATE_CLIENT</div>
+              <div class="flow-branch-sub">memory file + brand theme + output dirs</div>
+            </div>
+            <div class="flow-branch-if">
+              <div class="flow-branch-cond">IF new feature</div>
+              <div class="flow-branch-action">→ CREATE_FEATURE</div>
+              <div class="flow-branch-sub">systems, APIs, artifacts, open questions</div>
+            </div>
+            <div class="flow-branch-if">
+              <div class="flow-branch-cond">IF existing client + feature</div>
+              <div class="flow-branch-action">→ Load memory context</div>
+              <div class="flow-branch-sub">memory/projects/{client}/{client}.md + feature file - pre-fills known facts, skips repeated questions</div>
+            </div>
+            <div class="flow-branch-if">
+              <div class="flow-branch-cond">IF analysis / gap check</div>
+              <div class="flow-branch-action">→ ANALYZE mode</div>
+              <div class="flow-branch-sub">6 modes: client state, feature readiness, gaps, doc review, risks, codebase</div>
+            </div>
+          </div>
+          <div class="flow-branch-merge">All paths converge - context ready - proceed to command dispatch</div>
+        </div>
+      </div>
+      <div class="flow-arrow">
+        <svg width="40" height="48" viewBox="0 0 40 48"><path d="M20 0 L20 36 M10 28 L20 40 L30 28" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <!-- ── PHASE C: SYSTEM BOOTSTRAP (order-independent) ── -->
+    <div class="flow-phase-label">C - System Bootstrap</div>
+
+    <div class="flow-stage">
+      <div class="flow-parallel-block">
+        <div class="flow-parallel-banner">Order-independent</div>
+        <div class="flow-parallel-nodes-2">
+          <div class="flow-node flow-node-system">
+            <div class="flow-node-icon">📄</div>
+            <div class="flow-node-content">
+              <div class="flow-node-label">Auto-Loaded</div>
+              <div class="flow-node-title">CLAUDE.md</div>
+              <div class="flow-node-detail">Master prompt - knows all 39 commands, 27 agents (21 specialist + 6 debate), full directory map, glossary, decision checkpoint rules</div>
+            </div>
+          </div>
+          <div class="flow-node flow-node-context">
+            <div class="flow-node-icon">🔍</div>
+            <div class="flow-node-content">
+              <div class="flow-node-label">Self-Healing Check</div>
+              <div class="flow-node-title">command-patterns.md</div>
+              <div class="flow-node-detail">Scans for [Active] improvement patterns from prior sessions - applies any relevant to this command before executing</div>
+            </div>
+          </div>
+        </div>
+        <div class="flow-parallel-footer">Both load at startup - order-independent (executed sequentially within a single context; ordering is not constrained by data dependencies)</div>
+      </div>
+      <div class="flow-arrow">
+        <svg width="40" height="48" viewBox="0 0 40 48"><path d="M20 0 L20 36 M10 28 L20 40 L30 28" stroke="var(--teal)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <!-- ── PHASE D: COMMAND + AGENT DISPATCH (order-independent) ── -->
+    <div class="flow-phase-label">D - Command + Agent Dispatch</div>
+
+    <div class="flow-stage">
+      <div class="flow-parallel-block">
+        <div class="flow-parallel-banner">Order-independent</div>
+        <div class="flow-parallel-nodes-2">
+          <div class="flow-node flow-node-command">
+            <div class="flow-node-icon">⚡</div>
+            <div class="flow-node-content">
+              <div class="flow-node-label">Command File Loaded</div>
+              <div class="flow-node-title">GENERATE_SDD.md</div>
+              <div class="flow-node-detail">Execution protocol - which agents, which templates, quality gates, chunking strategy, decision checkpoint order</div>
+            </div>
+          </div>
+          <div class="flow-node flow-node-agent">
+            <div class="flow-node-icon">🤖</div>
+            <div class="flow-node-content">
+              <div class="flow-node-label">Primary Agent Activated</div>
+              <div class="flow-node-title">sdd-agent.md</div>
+              <div class="flow-node-detail">Role + reasoning strategy + output format + knowledge file list + quality bar definition</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-arrow">
+        <svg width="40" height="48" viewBox="0 0 40 48"><path d="M20 0 L20 36 M10 28 L20 40 L30 28" stroke="var(--teal)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <!-- ── PHASE E: DECISION CHECKPOINTS (conditional) ── -->
+    <div class="flow-phase-label">E - Decision Checkpoints (fires only what is relevant)</div>
+
+    <div class="flow-stage">
+      <div class="flow-node flow-node-checkpoint">
+        <div class="flow-node-icon">🛑</div>
+        <div class="flow-node-content">
+          <div class="flow-node-label">Decision Checkpoint Gate - Pause - Propose - Confirm - Proceed</div>
+          <div class="flow-node-title">9 checkpoint types - only relevant ones activate per task</div>
+          <div class="flow-checkpoint-grid">
+            <span class="flow-cp-chip cp-arch">🏗️ Architecture</span>
+            <span class="flow-cp-chip cp-contract">📋 Contract</span>
+            <span class="flow-cp-chip cp-security">🔒 Security</span>
+            <span class="flow-cp-chip cp-business">💰 Business Logic</span>
+            <span class="flow-cp-chip cp-migration">🔀 Migration</span>
+            <span class="flow-cp-chip cp-data">🧩 Data Model</span>
+            <span class="flow-cp-chip cp-product">📦 Product Selection</span>
+            <span class="flow-cp-chip cp-estimate">⏱️ Estimation</span>
+            <span class="flow-cp-chip cp-critical">⚠️ Critical Update</span>
+          </div>
+          <div class="flow-cp-example">
+            <strong>Example:</strong> "📦 I recommend CDP + Loyalty+ + Marvel + Engage+ for this client. Not using Connect+ - they have a real-time API. <strong>Does this look right?</strong>"<br>
+            <span style="color:var(--teal);font-weight:600;">→ You confirm or correct → Archon proceeds with full confidence</span>
+          </div>
+          <div class="flow-cp-note">SDD triggers 5 checkpoints. Dev spec triggers 2. Quick analysis triggers none. Conditional - never wastes a prompt.</div>
+        </div>
+      </div>
+      <div class="flow-arrow">
+        <svg width="40" height="48" viewBox="0 0 40 48"><path d="M20 0 L20 36 M10 28 L20 40 L30 28" stroke="var(--teal)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <!-- ── PHASE F: TOKEN OPTIMIZATION ── -->
+    <div class="flow-phase-label">F - Token Optimization</div>
+
+    <div class="flow-stage">
+      <div class="flow-node flow-node-token">
+        <div class="flow-node-icon">🎯</div>
+        <div class="flow-node-content">
+          <div class="flow-node-label">Token Optimization Layer</div>
+          <div class="flow-node-title">Registry → Selector → Context-Load Profile</div>
+          <div class="flow-node-detail">
+            <div class="flow-token-chain">
+              <span class="flow-token-step"><strong>REGISTRY</strong><br><span class="flow-token-cost">~500 tokens</span><br>What files exist?</span>
+              <span class="flow-token-arrow">→</span>
+              <span class="flow-token-step"><strong>SELECTOR</strong><br><span class="flow-token-cost">~300 tokens</span><br>Which profile fits?</span>
+              <span class="flow-token-arrow">→</span>
+              <span class="flow-token-step"><strong>LOAD-write-sdd</strong><br><span class="flow-token-cost">~12K tokens</span><br>Load 4 exact files</span>
+            </div>
+            <div class="flow-token-result">Total: ~13K tokens (≤5% for lean tasks; 8–9.5% for full SDD sessions with mature client memory) · Remaining: ~187K for reasoning · 29 profiles across all task types</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-arrow">
+        <svg width="40" height="48" viewBox="0 0 40 48"><path d="M20 0 L20 36 M10 28 L20 40 L30 28" stroke="var(--blue)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <!-- ── PHASE G: ORDER-INDEPENDENT KNOWLEDGE LOAD ── -->
+    <div class="flow-phase-label">G - Knowledge Load (Order-independent)</div>
+
+    <div class="flow-stage">
+      <div class="flow-parallel-block">
+        <div class="flow-parallel-banner">Order-independent - all 4 files loaded before generation begins</div>
+        <div class="flow-parallel-nodes-4">
+          <div class="flow-node flow-node-knowledge" style="padding:14px 16px;">
+            <div class="flow-node-icon" style="width:36px;height:36px;font-size:18px;">📐</div>
+            <div class="flow-node-content">
+              <div class="flow-node-label" style="font-size:9px;">Template</div>
+              <div class="flow-node-title" style="font-size:12px;">SDD arc42</div>
+              <div class="flow-node-detail" style="font-size:10px;">~3K tokens - 17 sections</div>
+            </div>
+          </div>
+          <div class="flow-node flow-node-knowledge" style="padding:14px 16px;">
+            <div class="flow-node-icon" style="width:36px;height:36px;font-size:18px;">📖</div>
+            <div class="flow-node-content">
+              <div class="flow-node-label" style="font-size:9px;">Guide</div>
+              <div class="flow-node-title" style="font-size:12px;">Solution Detailing</div>
+              <div class="flow-node-detail" style="font-size:10px;">~2K tokens - Section 9 depth</div>
+            </div>
+          </div>
+          <div class="flow-node flow-node-knowledge" style="padding:14px 16px;">
+            <div class="flow-node-icon" style="width:36px;height:36px;font-size:18px;">💡</div>
+            <div class="flow-node-content">
+              <div class="flow-node-label" style="font-size:9px;">Example</div>
+              <div class="flow-node-title" style="font-size:12px;">BFF Worked SDD</div>
+              <div class="flow-node-detail" style="font-size:10px;">~2.5K tokens - real patterns</div>
+            </div>
+          </div>
+          <div class="flow-node flow-node-knowledge" style="padding:14px 16px;">
+            <div class="flow-node-icon" style="width:36px;height:36px;font-size:18px;">✔️</div>
+            <div class="flow-node-content">
+              <div class="flow-node-label" style="font-size:9px;">Quality</div>
+              <div class="flow-node-title" style="font-size:12px;">SDD Quality Guide</div>
+              <div class="flow-node-detail" style="font-size:10px;">~1.5K tokens - checklist</div>
+            </div>
+          </div>
+        </div>
+        <div class="flow-knowledge-skipped" style="margin-top:10px;">219 other knowledge files <strong>not loaded</strong> - zero token cost - available on-demand via fragments</div>
+      </div>
+      <div class="flow-arrow">
+        <svg width="40" height="48" viewBox="0 0 40 48"><path d="M20 0 L20 36 M10 28 L20 40 L30 28" stroke="var(--blue)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <!-- ── PHASE H: MULTI-AGENT GENERATION (order-independent + conditional) ── -->
+    <div class="flow-phase-label">H - Multi-Agent Generation (order-independent specialists - conditional activation)</div>
+
+    <div class="flow-stage">
+      <div class="flow-node flow-node-generate" style="margin-bottom:10px;">
+        <div class="flow-node-icon">⚙️</div>
+        <div class="flow-node-content">
+          <div class="flow-node-label">Primary Agent - Full Platform Awareness</div>
+          <div class="flow-node-title">sdd-agent - Per Feature: 6-Step Procedure</div>
+          <div class="flow-generate-steps">
+            <div class="flow-gen-step"><span class="flow-gen-num">1</span> Trace full data flow - numbered steps, no gaps</div>
+            <div class="flow-gen-step"><span class="flow-gen-num">2</span> Document every API call - method + path + full JSON request + response samples</div>
+            <div class="flow-gen-step"><span class="flow-gen-num">3</span> Build field mapping table - 7 columns: source, type, cap field, cap type, required, field type, remarks</div>
+            <div class="flow-gen-step"><span class="flow-gen-num">4</span> Spell out business rules as explicit if/else conditional logic</div>
+            <div class="flow-gen-step"><span class="flow-gen-num">5</span> Write error handling table per feature - scenario, code, response, recovery</div>
+            <div class="flow-gen-step"><span class="flow-gen-num">6</span> Add sequence diagrams for multi-system interactions</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-parallel-block">
+        <div class="flow-parallel-banner">CONDITIONAL SPECIALISTS - activate only if that system is in scope</div>
+        <div class="flow-parallel-nodes-3">
+          <div class="flow-node flow-node-specialist">
+            <div class="flow-node-icon">🔗</div>
+            <div class="flow-node-content">
+              <div class="flow-node-label">IF Capillary APIs in scope</div>
+              <div class="flow-node-title">capillary-specialist</div>
+              <div class="flow-node-detail">Marvel offers, CDP profiles, Loyalty+ earn/burn/tier, Engage+ journeys, rate limits, error codes</div>
+            </div>
+          </div>
+          <div class="flow-node flow-node-specialist">
+            <div class="flow-node-icon">🌐</div>
+            <div class="flow-node-content">
+              <div class="flow-node-label">IF Neo Extension in scope</div>
+              <div class="flow-node-title">neo-specialist</div>
+              <div class="flow-node-detail">Dataflow blocks, MongoDB DAO, Script structure, BFF integration, auth (Basic no-padding)</div>
+            </div>
+          </div>
+          <div class="flow-node flow-node-specialist">
+            <div class="flow-node-icon">⚡</div>
+            <div class="flow-node-content">
+              <div class="flow-node-label">IF BFF in scope</div>
+              <div class="flow-node-title">bff-specialist</div>
+              <div class="flow-node-detail">GraphQL (code-first library), WebClient, Redis cache, multi-tenant config, reactive patterns, circuit breaker</div>
+            </div>
+          </div>
+        </div>
+        <div class="flow-parallel-footer">Specialists add domain depth to the primary agent's output - no extra prompts needed from you</div>
+      </div>
+      <div class="flow-arrow">
+        <svg width="40" height="48" viewBox="0 0 40 48"><path d="M20 0 L20 36 M10 28 L20 40 L30 28" stroke="var(--blue)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <!-- ── PHASE I: CHUNKED OUTPUT ── -->
+    <div class="flow-phase-label">I - Chunked Output (large document handling)</div>
+
+    <div class="flow-stage">
+      <div class="flow-node flow-node-output">
+        <div class="flow-node-icon">📝</div>
+        <div class="flow-node-content">
+          <div class="flow-node-label">Workspace Chunking - Write - Chunk - Resume</div>
+          <div class="flow-node-title">Each section saved to disk as it completes</div>
+          <div class="flow-chunk-visual">
+            <div class="flow-chunk">Sections 1-8<br><span class="chunk-size">~5 pages</span></div>
+            <div class="flow-chunk">Feature 9.1<br><span class="chunk-size">~4 pages</span></div>
+            <div class="flow-chunk">Feature 9.2<br><span class="chunk-size">~4 pages</span></div>
+            <div class="flow-chunk flow-chunk-active">Feature 9.3<br><span class="chunk-size">writing...</span></div>
+            <div class="flow-chunk flow-chunk-pending">Sections 10-17<br><span class="chunk-size">pending</span></div>
+          </div>
+          <div class="flow-chunk-note">Context full? Resume from last checkpoint in a fresh session - no work lost. Workspace rules enforce consistent file naming and state tracking.</div>
+        </div>
+      </div>
+      <div class="flow-arrow">
+        <svg width="40" height="48" viewBox="0 0 40 48"><path d="M20 0 L20 36 M10 28 L20 40 L30 28" stroke="var(--gold)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <!-- ── PHASE J: QUALITY GATES ── -->
+    <div class="flow-phase-label">J - Quality Checks (order-independent - consolidated into a single review block)</div>
+
+    <div class="flow-stage">
+      <div class="flow-parallel-block">
+        <div class="flow-parallel-banner">Order-independent Quality Checks</div>
+        <div class="flow-parallel-nodes-3">
+          <div class="flow-node flow-node-quality">
+            <div class="flow-node-icon">🏗️</div>
+            <div class="flow-node-content">
+              <div class="flow-node-label">Architecture Review</div>
+              <div class="flow-node-title">RUN_ARCH_REVIEW</div>
+              <div class="flow-node-detail">7 dimensions: scalability, security, resilience, observability, maintainability, data consistency, cost</div>
+            </div>
+          </div>
+          <div class="flow-node flow-node-quality">
+            <div class="flow-node-icon">⚠️</div>
+            <div class="flow-node-content">
+              <div class="flow-node-label">Risk Analysis</div>
+              <div class="flow-node-title">RUN_RISK_ANALYSIS</div>
+              <div class="flow-node-detail">8 categories scored: technical, migration, integration, data, timeline, security, operational, business</div>
+            </div>
+          </div>
+          <div class="flow-node flow-node-quality">
+            <div class="flow-node-icon">✅</div>
+            <div class="flow-node-content">
+              <div class="flow-node-label">Completeness Check</div>
+              <div class="flow-node-title">CHECKER-sdd-completeness</div>
+              <div class="flow-node-detail">Pass/fail against 46 gates: every feature has flow + APIs + mapping + business rules + error handling</div>
+            </div>
+          </div>
+        </div>
+        <div class="flow-parallel-footer">All 3 checks run - consolidated feedback returned as a single review block. Remediation is human-directed: the architect reviews findings and re-runs affected sections as needed.</div>
+      </div>
+      <div class="flow-arrow">
+        <svg width="40" height="48" viewBox="0 0 40 48"><path d="M20 0 L20 36 M10 28 L20 40 L30 28" stroke="var(--gold)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <!-- ── PHASE K: FINALIZATION ── -->
+    <div class="flow-phase-label">K - Finalization (order-independent)</div>
+
+    <div class="flow-stage">
+      <div class="flow-parallel-block">
+        <div class="flow-parallel-banner">Order-independent</div>
+        <div class="flow-parallel-nodes-3">
+          <div class="flow-node flow-node-final">
+            <div class="flow-node-icon">📁</div>
+            <div class="flow-node-content">
+              <div class="flow-node-label">File Written to Disk</div>
+              <div class="flow-node-title">output/{client}/sdd/</div>
+              <div class="flow-node-detail"><code>sdd-v1.md</code> - 40-80 pages - Capillary logo cover page - Teal theme applied</div>
+            </div>
+          </div>
+          <div class="flow-node flow-node-memory">
+            <div class="flow-node-icon">🧠</div>
+            <div class="flow-node-content">
+              <div class="flow-node-label">Memory Updated</div>
+              <div class="flow-node-title">Persistent Context</div>
+              <div class="flow-memory-grid">
+                <span class="flow-mem-chip">projects/acme-retail/acme-retail.md</span>
+                <span class="flow-mem-chip">architecture-decisions.md</span>
+                <span class="flow-mem-chip">platform-constraints.md</span>
+              </div>
+            </div>
+          </div>
+          <div class="flow-node flow-node-context">
+            <div class="flow-node-icon">🔄</div>
+            <div class="flow-node-content">
+              <div class="flow-node-label">Session-Close Protocol Triggered</div>
+              <div class="flow-node-title">END_SESSION Protocol</div>
+              <div class="flow-node-detail">Track A: client memory current - Track B: template improvements proposed - Track C: doc backlog queued</div>
+            </div>
+          </div>
+        </div>
+        <div class="flow-parallel-footer">Critical Update Protocol confirms with you before any memory write - git commit preserves full history</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- ─── Section: Memory ─── -->
+  <h2>Persistent Memory: Decisions That Survive Sessions</h2>
+
+  <p>The biggest limitation of AI chat is amnesia - every conversation starts blank. Archon solves this with on-disk memory files that persist between sessions:</p>
+
+  <div class="card-grid animate-on-scroll">
+    <div class="card">
+      <div class="card-icon orange">📝</div>
+      <h4>Architecture Decisions</h4>
+      <p>Formal ADRs with context, decision, rationale, consequences. "Why we chose Neo over a custom service for search history."</p>
+    </div>
+    <div class="card">
+      <div class="card-icon teal">🔒</div>
+      <h4>Platform Constraints</h4>
+      <p>Known limitations: "Java 11 not 17", "BFF uses code-first GraphQL library, not Spring GraphQL", "Neo execute() is synchronous", "CDP rate limit 100rps."</p>
+    </div>
+    <div class="card">
+      <div class="card-icon blue">🔗</div>
+      <h4>Integration Patterns</h4>
+      <p>Reusable patterns discovered across projects. "Event Bus consumer with behavioral event + Kafka" or "SFTP import via Connect+."</p>
+    </div>
+    <div class="card">
+      <div class="card-icon gold">📚</div>
+      <h4>Migration Lessons</h4>
+      <p>What went wrong and what to watch for. "Capillary CDP has a 100rps limit - we had to add 10ms delays between batches."</p>
+    </div>
+  </div>
+
+  <div class="card-grid animate-on-scroll">
+    <div class="card">
+      <div class="card-icon orange">📂</div>
+      <h4>Per-Client Context</h4>
+      <p>Each client gets a persistent file: systems, volumes, member ID formats, cutover windows, key contacts, specific quirks. No more re-explaining "ACME uses SAP POS" every session.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon teal">🎯</div>
+      <h4>Domain Learning</h4>
+      <p>Loyalty industry knowledge: earn ratio economics, tier psychology, redemption patterns, regulatory constraints. Business wisdom that shapes every design.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon blue">🐛</div>
+      <h4>Anti-Patterns Encountered</h4>
+      <p>Real production bugs with symptoms, root cause, and fix: "Mono.zip with mixed timeouts causes the slowest call to dominate." Prevents the team from hitting the same bug twice.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon gold">📋</div>
+      <h4>Client Doc Patterns + Template Evolution</h4>
+      <p>Cross-client patterns that improve every doc generated - question patterns, structure patterns, tone for different audiences. Template evolution log tracks when templates improve from real usage: Proposed - Approved - Applied.</p>
+    </div>
+  </div>
+
+  <div class="card-grid animate-on-scroll">
+    <div class="card">
+      <div class="card-icon orange">📊</div>
+      <h4>Estimation Calibration</h4>
+      <p>Every estimate the estimation-agent produces is logged to <code>memory/estimation-calibration.md</code>. When actuals come in post-sprint, the SA records them. After 3+ closed estimates, an accuracy rate surfaces - and the sizing table in the estimation-agent self-corrects. Estimates get sharper with every project.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon teal">🗺️</div>
+      <h4>Knowledge Dependency Map</h4>
+      <p>Run <code>MAP_DEPENDENCIES</code> to see exactly which agents, commands, and context-load profiles reference each of the 219 knowledge files. Before updating a file, see the blast radius. Orphaned files (zero references) surface for review or removal.</p>
+    </div>
+  </div>
+
+  <p>When you discover something important during a project, the <code>UPDATE_LEARNING</code> command stores it. A <strong>Critical Update Protocol</strong> requires explicit confirmation before any memory write - no silent modifications to the knowledge base.</p>
+
+  <p>Each memory file has a token budget defined in <code>memory/ARCHIVAL-POLICY.md</code>. When a file approaches its threshold, <code>END_SESSION</code> Step B0 flags it and prompts archival to <code>memory/archive/</code> - keeping the active context lean and preventing unbounded growth.</p>
+
+  <p>Archon uses episodic memory - decisions and learnings are stored in flat markdown files loaded at session start. Retrieval is not vector-indexed; the full file loads into context. The archival policy caps file sizes to keep this cost bounded.</p>
+
+  <p>Memory files are markdown on disk, tracked in Git. They are not a database - there are no ACID guarantees. Concurrent writes from two simultaneous sessions produce Git merge conflicts. Interrupted writes leave partial state. Git history is the rollback mechanism.</p>
+
+  <p>Because memory files live on disk inside a Git repository, they're version-controlled. The team shares learnings through Git - one architect's discovery becomes everyone's knowledge.</p>
+
+  <div class="feature-block animate-on-scroll" style="background:var(--gold-soft);border-left:3px solid var(--gold);">
+    <h4>Multi-Architect Teams: Concurrency Constraints</h4>
+    <p>Archon is designed for one active session writer per client memory file. In multi-architect teams, coordinate using Git branch conventions: one architect owns a client context at a time, merging decisions via pull request before the next session begins. Simultaneous writes to the same memory file will produce Git merge conflicts.</p>
+  </div>
+
+  <div class="feature-block animate-on-scroll" style="background:var(--surface-warm);border-left:3px solid var(--ink-muted);">
+    <h4>Security: Client Data in Git</h4>
+    <p>Before pushing to a shared repository, review <code>memory/projects/</code> for client-sensitive content. For regulated industries or NDA-covered clients, add <code>memory/projects/{client}/</code> to <code>.gitignore</code> and distribute client context through secure, access-controlled channels. The system knowledge base (agents, skills, templates) can be shared freely - client context files should follow your organisation's data governance policy.</p>
+  </div>
+
+  <div class="code-block">
+    <span class="code-label">Claude Code</span>
+    <span class="accent">&gt;</span> <span class="keyword">UPDATE_LEARNING</span><br><br>
+    <span class="accent">&gt;</span> <span class="string">We discovered that Capillary's changeIdentifier API must be</span><br>
+    <span class="accent">&gt;</span> <span class="string">called BEFORE updating the customer profile when the email</span><br>
+    <span class="accent">&gt;</span> <span class="string">changes. Otherwise the update overwrites with the old email.</span><br><br>
+    <span class="comment">⚠️ CRITICAL UPDATE REQUIRED</span><br>
+    <span class="comment">I'll add this to memory/platform-constraints.md:</span><br>
+    <span class="comment">"changeIdentifier API must precede profile update for email changes"</span><br>
+    <span class="comment">Confirm? (y/n)</span>
+  </div>
+
+  <!-- ─── Section: Workspace Chunking ─── -->
+  <h2>Workspace Chunking: How It Handles 80-Page Documents</h2>
+
+  <p>An 80-page SDD is roughly 20,000 tokens of output. Claude's context window can fill up mid-generation, potentially losing everything. The workspace chunking system prevents this:</p>
+
+  <ol class="step-list animate-on-scroll">
+    <li><strong>Break output into 2K-token chunks</strong> - each chunk is a self-contained section of the document, written to a separate file in <code>_workspace/{task}/chunks/</code>.</li>
+    <li><strong>Track progress in <code>_status.json</code></strong> - records which chunks are complete, which section comes next, and any intermediate state.</li>
+    <li><strong>If context fills up</strong> - Claude saves progress. In the next session, only <code>_status.json</code> (the lightweight index) loads - not the chunk content. Chunks assemble only at final output time. The session resumes from the last checkpoint without reloading everything already written.</li>
+    <li><strong>Assemble final document</strong> - when all chunks are done, they're concatenated into the final deliverable.</li>
+  </ol>
+
+  <p>This means a 50-page SDD generation that would have crashed mid-way now survives context limits and can be resumed across multiple sessions.</p>
+
+  <!-- ─── Section: Risk Engine ─── -->
+  <h2>The Risk Engine: Automated Architecture Evaluation</h2>
+
+  <p>The risk engine scores designs across 8 categories on a 1-5 scale, with Rewards+-specific evaluation criteria built in:</p>
+
+  <div class="table-wrap animate-on-scroll">
+    <table>
+      <thead><tr><th>Category</th><th>What It Checks</th><th>Platform-Specific Criteria</th></tr></thead>
+      <tbody>
+        <tr><td>Scalability</td><td>10x growth handling, bottlenecks</td><td>Neo MongoDB volume, BFF Redis sizing</td></tr>
+        <tr><td>Operational</td><td>Deployment, monitoring, runbooks</td><td>Cutover runbook completeness</td></tr>
+        <tr><td>Performance</td><td>Response times, caching, indexing</td><td>Neo <500ms, Mono.zip for parallel calls</td></tr>
+        <tr><td>Data Consistency</td><td>Sync gaps, race conditions</td><td>Points drift ≤0.01% - detected via post-load reconciliation checker comparing Capillary ledger totals against source extract. A RED result halts the cutover and triggers the rollback procedure in the cutover runbook.</td></tr>
+        <tr><td>Integration</td><td>Fallbacks, retries, circuit breakers</td><td>Capillary down → cache fallback?</td></tr>
+        <tr><td>Vendor Dependency</td><td>Lock-in, exit cost</td><td>Capillary abstraction assessment</td></tr>
+        <tr><td>Migration</td><td>Data loss, rollback, cutover window</td><td>Load order, 16 known pitfalls</td></tr>
+        <tr><td>Cost</td><td>Infrastructure predictability</td><td>Right-sizing per tenant volume</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>For migration projects, a specialized <strong>Migration Risk Detector</strong> checks the 6 most critical risks - data loss, points balance drift, tier assignment errors, load order violations, cutover overruns, and rollback failures - each with specific thresholds from the eval-rules.</p>
+
+  <div class="sep"></div>
+
+  <!-- ─── Section: Setup ─── -->
+  <h2>The Setup: Claude Code + VS Code + Git</h2>
+
+  <p>After testing every combination of tools, the winning setup is surprisingly simple - and costs $0 beyond the Claude Team plan:</p>
+
+  <div class="compare-grid animate-on-scroll">
+    <div class="compare-card recommended">
+      <div class="rec-badge">Primary Tool</div>
+      <h4>Claude Code (Terminal)</h4>
+      <div class="role">Heavy work - generation, analysis, memory</div>
+      <ul>
+        <li>Reads all 384 files from disk instantly</li>
+        <li>Writes output files directly (SDD.md, specs)</li>
+        <li>Memory persists between sessions</li>
+        <li>Can read your actual BFF codebase</li>
+        <li>Free - uses Claude Team plan quota</li>
+        <li>Generation tasks run on claude-sonnet-4-6</li>
+      </ul>
+    </div>
+    <div class="compare-card">
+      <h4>Claude Chat (claude.ai)</h4>
+      <div class="role">Quick questions &amp; reviews</div>
+      <ul>
+        <li>Upload zip for occasional deep questions</li>
+        <li>Review a single SDD section</li>
+        <li>Brainstorming and back-and-forth</li>
+        <li>Mobile/tablet access</li>
+        <li>Already included in Team plan</li>
+      </ul>
+    </div>
+  </div>
+
+  <p><strong>VS Code</strong> (free, open-source) serves as your reading and editing environment. Browse the library, review generated documents with Markdown Preview, edit memory files, and manage Git. The key extensions: <em>Markdown Preview Enhanced</em>, <em>Mermaid Preview</em>, <em>GitLens</em>, and <em>Todo Tree</em> - all free.</p>
+
+  <p><strong>Git</strong> tracks everything - the library, generated SDDs, architecture decisions, memory updates. Push to a shared repo and the whole team gets Archon with shared learnings.</p>
+
+  <h3>Installation</h3>
+
+  <div class="code-block">
+    <span class="code-label">Terminal</span>
+    <span class="comment"># Install Claude Code</span><br>
+    <span class="keyword">npm</span> install <span class="flag">-g</span> @anthropic-ai/claude-code<br><br>
+    <span class="comment"># Create workspace</span><br>
+    <span class="keyword">mkdir</span> ~/sa-workspace <span class="dim">&amp;&amp;</span> <span class="keyword">cd</span> ~/sa-workspace<br>
+    <span class="keyword">git</span> init<br><br>
+    <span class="comment"># Unzip Archon</span><br>
+    <span class="keyword">unzip</span> archon-v1.0.zip <span class="flag">-d</span> .claude/<br><br>
+    <span class="comment"># Symlink CLAUDE.md to project root (auto-loaded)</span><br>
+    <span class="keyword">ln</span> <span class="flag">-s</span> <span class="string">"$(pwd)/.claude/CLAUDE.md"</span> CLAUDE.md<br><br>
+    <span class="comment"># Start working</span><br>
+    <span class="keyword">claude</span>
+  </div>
+
+  <p>That's it. When you run <code>claude</code>, it reads <code>CLAUDE.md</code> automatically, gaining access to all 27 agents (21 specialist + 6 debate), 39 commands, 18 architecture patterns, 16 client engagement templates, the risk engine, and the entire knowledge base - without you typing a single instruction.</p>
+
+  <p>Every session opens with a startup verification line confirming what was loaded, the token cost, and remaining context - no guessing whether the library initialized correctly:</p>
+
+  <div class="code-block">
+    <span class="code-label">Claude Code</span>
+    <span class="string">&#10003; Archon ready | Platform: rewards-plus | Profile: LOAD-write-sdd | Library: ~9.2K tokens | Context remaining: ~191K</span>
+  </div>
+
+  <p>If you don't see this line, the startup sequence didn't complete - say <em>"run startup sequence"</em> and it will re-run Steps 1-6 before proceeding.</p>
+
+  <div class="sep"></div>
+
+  <!-- ─── Section: Daily Workflows ─── -->
+  <h2>What a Typical Day Looks Like</h2>
+
+  <div class="feature-block animate-on-scroll">
+    <h4>Morning: Generate an SDD for a new client <span class="tag tag-orange">Generation</span></h4>
+    <p>Run <code>GENERATE_SDD</code> with client details. Claude activates the SDD agent, loads the SDD template (refined from real 76-page SDD experience), and generates a complete document with numbered data flows, full JSON API samples, 7-column field mapping tables, explicit business rules, and per-feature error handling tables. Output: 40-page .md file written to disk - reviewed by the architect before client delivery.</p>
+  </div>
+
+  <div class="feature-block animate-on-scroll">
+    <h4>Late Morning: Architecture debate on a design decision <span class="tag tag-teal">Debate</span></h4>
+    <p>Should the leaderboard use Neo pre-compute or real-time BFF aggregation? Run <code>RUN_DEBATE</code>. Five agents argue from different angles. The synthesizer produces a tradeoff matrix, final recommendation, and formal ADR. Commit the ADR to Git.</p>
+  </div>
+
+  <div class="feature-block animate-on-scroll">
+    <h4>Afternoon: Generate dev + UI + QA specs for one feature <span class="tag tag-blue">Specs</span></h4>
+    <p>Run <code>CREATE_DEV_SPEC</code>, <code>CREATE_UI_SPEC</code>, and <code>CREATE_QA_SPEC</code> for the "Nearby Offers" feature. Claude generates backend API contracts, a 21-section UI spec with MUI components and WCAG AA compliance, and comprehensive test cases - all referencing the same SDD section for consistency.</p>
+  </div>
+
+  <div class="feature-block animate-on-scroll">
+    <h4>End of Day: Store a new learning <span class="tag tag-orange">Memory</span></h4>
+    <p>During implementation, the team discovered that Capillary's bulk member API has a different rate limit per region. Run <code>UPDATE_LEARNING</code> to add it to platform constraints. Git commit. Tomorrow's session starts with this knowledge already loaded.</p>
+  </div>
+
+  <div class="feature-block animate-on-scroll">
+    <h4>Ad-hoc: "How long will this take?" <span class="tag tag-teal">Estimation</span></h4>
+    <p>The product owner asks for a timeline on the "Challenges" feature. The estimation agent breaks it into components (2 Neo dataflows + 1 BFF query + 1 UI component + testing), applies T-shirt sizing, converts to story points and calendar days, adds risk buffer for the unknown Capillary gamification API, and produces a structured estimate with assumptions and risks.</p>
+  </div>
+
+  <div class="feature-block animate-on-scroll">
+    <h4>When things break: Incident resolution <span class="tag tag-blue">Operations</span></h4>
+    <p>A P1 alert fires - offer redemption is failing. The incident resolution workflow kicks in: triage with the BFF specialist agent, diagnose using the error taxonomy, mitigate using the circuit breaker pattern, communicate via the communication agent (status update to client), then postmortem via <code>UPDATE_LEARNING</code> so the root cause is permanently recorded.</p>
+  </div>
+
+  <div class="feature-block animate-on-scroll">
+    <h4>Monday morning: Library health scan <span class="tag tag-orange">Maintenance</span></h4>
+    <p>Run <code>HEALTH_CHECK</code> before the week starts - 30 seconds, one-page report. Surfaces stale knowledge files approaching their re-verification threshold, memory files nearing their token budget, pending documentation backlog entries, and open estimation loops with no actuals recorded. Use <code>SEARCH_LIBRARY {keyword}</code> any time you know something exists in the 219-file library but can't recall which file covers it - near-zero token cost, results in seconds.</p>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- ─── Section: Order-Independent Execution ─── -->
+  <h2>Order-Independent Execution and Multi-Agent Analysis</h2>
+
+  <p>For complex operations, the system executes order-independent steps sequentially within a single context - steps that do not depend on each other's outputs are not constrained in ordering. The migration workflow, for example, coordinates 5 extraction streams:</p>
+
+  <div class="code-block">
+    <span class="code-label">Migration DAG</span>
+    <span class="keyword">Discovery</span><br>
+    &nbsp;&nbsp;├─ <span class="string">Extract Members</span> &nbsp;&nbsp;&nbsp;─┐<br>
+    &nbsp;&nbsp;├─ <span class="string">Extract Points</span> &nbsp;&nbsp;&nbsp;&nbsp;─┤ <span class="comment">parallel</span><br>
+    &nbsp;&nbsp;├─ <span class="string">Extract Tiers</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;─┤<br>
+    &nbsp;&nbsp;├─ <span class="string">Extract Transactions</span>─┤<br>
+    &nbsp;&nbsp;└─ <span class="string">Extract Vouchers</span> &nbsp;&nbsp;─┘<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
+    &nbsp;&nbsp;<span class="keyword">Transform</span> <span class="comment">(parallel per entity)</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
+    &nbsp;&nbsp;<span class="keyword">Load</span> <span class="comment">(SEQUENTIAL: Members → Cards → Points → Tiers → Txn)</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
+    &nbsp;&nbsp;<span class="keyword">Reconcile</span> → <span class="keyword">BFF Onboard</span> → <span class="keyword">UAT</span> → <span class="keyword">Cutover</span>
+  </div>
+
+  <p>The <code>RUN_MULTI_AGENT_ANALYSIS</code> command runs the architecture agent, risk agent, review agent, and optimization agent in parallel on the same design - producing a unified report with prioritized action items from all four perspectives.</p>
+
+  <!-- ─── Section: Decision Checkpoints ─── -->
+  <h2>Decision Checkpoints: The Guardrail That Changes Everything</h2>
+
+  <p>The single most important feature in Archon isn't the agents or the knowledge base - it's the <strong>checkpoint system</strong> that prevents the AI from silently making wrong assumptions. Without it, you could get a 50-page SDD built on the wrong architecture. With it, every significant decision is confirmed before execution.</p>
+
+  <p>There are 9 checkpoint types. Each fires at a specific point in the workflow:</p>
+
+  <div class="table-wrap animate-on-scroll">
+    <table>
+      <thead><tr><th>Checkpoint</th><th>Fires When</th><th>What You Confirm</th></tr></thead>
+      <tbody>
+        <tr><td>🏗️ Architecture</td><td>System design begins</td><td>Which systems, what pattern, data flow direction</td></tr>
+        <tr><td>📋 Contract</td><td>API design begins</td><td>Endpoint path, method, request/response shape, fields</td></tr>
+        <tr><td>🔒 Security</td><td>Auth model chosen</td><td>OAuth vs API key vs SAML, PII handling, secret storage</td></tr>
+        <tr><td>💰 Business Logic</td><td>Loyalty rules designed</td><td>Earn ratios, tier thresholds, expiry model, milestones</td></tr>
+        <tr><td>🔀 Migration</td><td>Migration planned</td><td>Strategy (phased/big-bang/strangler), cutover window, rollback criteria</td></tr>
+        <tr><td>🧩 Data Model</td><td>Schema designed</td><td>Field types (Regular/Extended/Custom), collections, indexes, Redis keys</td></tr>
+        <tr><td>📦 Product Selection</td><td>Solution scoped</td><td>Which Capillary products and why, what's excluded and why</td></tr>
+        <tr><td>⏱️ Estimation</td><td>Effort estimated</td><td>Breakdown, assumptions, risks - before it goes to stakeholders</td></tr>
+        <tr><td>⚠️ Critical Update</td><td>Memory written</td><td>What's being stored to persistent knowledge</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Different commands trigger different checkpoints. An SDD generation gets 5 checkpoints (product selection, architecture, security, business logic, contracts). A dev spec gets 2 (contract, data model). A quick API question gets none. The system is proportional - it doesn't slow you down for simple tasks, but it catches wrong assumptions on big ones.</p>
+
+  <div class="pull-quote">The rule is simple: <strong>never assume, always confirm</strong>. If a decision shapes the output in a way that would be costly to undo, the system pauses and asks first.</div>
+
+  <p>And if you're in a hurry? Say <strong>"skip checkpoints"</strong> and Archon proceeds without pausing - but it notes the assumptions it made, so you can review them in the final output.</p>
+
+  <!-- ─── Section: Output Convention ─── -->
+  <h2>Client-First Output: One Client, One Folder, Every Deliverable</h2>
+
+  <p>Every command starts by asking: <strong>"Which client is this for?"</strong> All generated artifacts - SDDs, LLDs, specs, reviews, migration plans - go into <code>output/{client-name}/</code> with organized subdirectories. No scattered files, no confusion about which document belongs to which client.</p>
+
+  <div class="dir-tree animate-on-scroll" style="font-size:13px;">
+    <span class="folder">output/</span><br>
+    &nbsp;&nbsp;<span class="folder">acme-retail/</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">sdd/</span> <span class="file">sdd-v1.md</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">lld/</span> <span class="file">lld-offers.md</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">specs/</span> <span class="file">offers-dev-spec.md, offers-ui-spec.md, offers-qa-spec.md</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">adr/</span> <span class="file">ADR-001-use-neo-for-search.md</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">reviews/</span> <span class="file">arch-review.md, risk-analysis.md</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">migration/</span> <span class="file">migration-plan.md, post-migration-report.md</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">communication/</span> <span class="file">status-update-2025-03-28.md</span><br>
+    &nbsp;&nbsp;<span class="folder">beta-corp/</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="desc">...same structure</span>
+  </div>
+
+  <p>What stays inside <code>.claude/</code>? Memory (architecture decisions, platform constraints, learnings), knowledge base, agents, the system itself. What goes to <code>output/</code>? Everything you deliver to a client or hand off to a developer. Clean separation - the system's brain stays permanent, the deliverables are per-client.</p>
+
+  <div class="sep"></div>
+
+  <!-- ─── Section: Session Close Protocol ─── -->
+  <h2>You Know How I Keep Myself Updated?</h2>
+
+  <p class="lead">Every session, Archon watches what changed in its own setup. When something new gets built - a new agent, a template improvement, a scope decision - it queues an update. Not immediately, because context may be running low at session end. Just queued. Precisely described. Ready for when you ask.</p>
+
+  <h3>END_SESSION - Three-Track Close After Every Session</h3>
+
+  <p>Every working session closes with <code>END_SESSION</code>. Two tracks run, then a third queues documentation updates. It also auto-triggers - no need to remember to run it. Auto-fires after 8+ turns, document generation, architecture decisions, or closure signals (done / thanks / bye / wrap up / that's all / closing).</p>
+
+  <div class="compare-grid animate-on-scroll">
+    <div class="compare-card recommended">
+      <div class="rec-badge">Track A - Client Memory</div>
+      <h4>memory/projects/{client}/{client}.md</h4>
+      <div class="role">Keeps client context permanently current</div>
+      <ul>
+        <li>Decisions made this session</li>
+        <li>Dates and milestones confirmed</li>
+        <li>Scope changes - added or removed</li>
+        <li>New contacts identified</li>
+        <li>Documents generated (with output path)</li>
+        <li>Open issues and blockers surfaced</li>
+      </ul>
+    </div>
+    <div class="compare-card">
+      <div class="rec-badge">Track B - Library Evolution</div>
+      <h4>Templates + Patterns + Domain Memory</h4>
+      <div class="role">Makes Archon smarter over time</div>
+      <ul>
+        <li>Template divergence detected and proposed</li>
+        <li>Reusable patterns extracted and saved</li>
+        <li>Domain learnings classified and stored</li>
+        <li>Approved template changes applied to files</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>CONTINUE_LAST_SESSION - Never Lose a Session to a Context Limit Again</h3>
+
+  <p>When a session ends, a Stop hook fires and writes a recovery snapshot to <code>session/recovery/last-session-recovery.md</code> containing the last 20 conversation turns, active client and feature context, and every artifact written during the session. When the context window fills up mid-SDD or mid-migration, nothing is lost.</p>
+
+  <p>In the next fresh session, run <code>CONTINUE_LAST_SESSION</code>. It reads the recovery file, reloads the same context-load profile, reconstructs client and feature state, and presents what was in progress - then asks what to continue. The session picks up exactly where it left off.</p>
+
+  <h3>UPDATE_ARCHON_DOC - The System That Documents Itself</h3>
+
+  <p>Track C of END_SESSION watches for setup changes - new agent, new command, new template count, updated memory files. When it detects one, it writes a compact entry to <code>memory/archon-doc-backlog.md</code>. Specific enough for a fresh session to act on. No context required.</p>
+
+  <p>Run <code>UPDATE_ARCHON_DOC</code> and it reads the backlog, applies only what is out of sync, and marks entries applied. It also cross-checks all numeric counts in both docs against REGISTRY.md - catching drift even when no backlog entry exists. Both, this post and setup guide stay current with the living system - without a single line of manual editing.</p>
+
+  <div class="code-block">
+    <span class="code-label">Claude Code</span>
+    <span class="accent">&gt;</span> <span class="keyword">UPDATE_ARCHON_DOC</span><br><br>
+    <span class="comment">// reads memory/archon-doc-backlog.md</span><br>
+    <span class="comment">// finds 4 pending entries from the last 2 sessions:</span><br>
+    <span class="comment">//   DOC-001 - doc-writing-agent added (agents: 20 - 21)</span><br>
+    <span class="comment">//   DOC-002 - 3 new commands added (commands: 14 - 19)</span><br>
+    <span class="comment">//   DOC-003 - 16 CLIENTDOC templates added</span><br>
+    <span class="comment">//   DOC-004 - session-close maintenance protocol added</span><br>
+    <span class="comment">// applies surgical edits to archon-details.html</span><br>
+    <span class="comment">// applies surgical edits to ARCHON-SETUP-GUIDE.md</span><br>
+    <span class="comment">// marks all 4 entries [Applied]</span><br><br>
+    <span class="string">Both docs updated. 4 entries applied. Backlog clear.</span>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- ─── Section: Self-Correcting ─── -->
+  <h2>Self-Updating Knowledge Library</h2>
+
+  <p>The library includes two self-correction mechanisms:</p>
+
+  <p><strong>Validator files</strong> (<code>_validators/</code>) define rules for checking library integrity - broken cross-references, orphaned files, missing minimum content depth. After any update, these can be run to verify the library is consistent.</p>
+
+  <p><strong>[INFERRED] tags</strong> appear throughout Capillary-specific content. These mark sections written from general Capillary knowledge that haven't been verified against the latest API docs. When a developer encounters an <code>[INFERRED]</code> section that's wrong, <code>UPDATE_LEARNING</code> corrects it - the fix persists for all future sessions and all team members.</p>
+
+  <p><strong>Staleness detection</strong> prevents [INFERRED] sections from silently aging into wrong answers. Every knowledge file carries <code>staleness_risk: high|medium|low</code> and a <code>last_verified</code> date in its frontmatter. REGISTRY.md checks these at session start and flags any file overdue for re-verification as <code>[VERIFY]</code>. High-risk files (Capillary APIs) flag after 90 days. Medium-risk (BFF/Neo) after 180 days. Low-risk (methodology) after 365 days. Stale facts surface before they reach a production design.</p>
+
+  <p>The <strong>Critical Update Protocol</strong> prevents accidental corruption. Any write to memory files, architecture patterns, or knowledge types requires explicit confirmation. Claude shows exactly what will change and waits for approval before proceeding.</p>
+
+  <div class="sep"></div>
+
+  <!-- ─── Section: Team Libraries ─── -->
+  <h2>Wait - What About the Dev, UI, and QA Teams?</h2>
+
+  <p>You must be thinking: <em>"This is great for the SA... but what about us? We're the ones actually building the thing. Can we have something similar?"</em></p>
+
+  <p>Yes. And the pattern is identical.</p>
+
+  <p>Archon works because it gives the SA a domain-aware AI partner that knows the platform deeply and remembers decisions. Dev, UI, and QA teams need exactly the same thing - but their domain is <strong>code, components, and test coverage</strong>, not architecture documents. The <code>.claude/</code> structure stays the same. What changes is what goes inside.</p>
+
+  <div class="table-wrap animate-on-scroll">
+    <table>
+      <thead><tr><th>Team</th><th>Primary Pain</th><th>What the AI Should Do</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Backend Dev</strong></td><td>Boilerplate, API integration, PR context loss between sessions</td><td>Generate feature code, explain patterns, review PRs against team standards</td></tr>
+        <tr><td><strong>UI / Frontend</strong></td><td>Component inconsistency, design system drift, missed a11y</td><td>Generate MUI components, enforce design system, catch WCAG issues</td></tr>
+        <tr><td><strong>QA</strong></td><td>Manual test case writing, coverage gaps, regression overhead</td><td>Generate test cases from spec, catch edge cases, write automation scripts</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Backend Dev -->
+  <h3>The Backend Dev Library</h3>
+
+  <p>The dev team's biggest pain isn't hard problems - it's the repetitive ones. Writing the same WebClient pattern for the 12th time. Re-explaining the BFF GraphQL annotation format every session. Searching the same GraphQL schema to check if a field already exists. A dev library fixes all of this.</p>
+
+  <div class="dir-tree animate-on-scroll">
+    <span class="folder">.claude/</span><br>
+    &nbsp;&nbsp;<span class="folder">knowledge/</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">stack/</span> <span class="desc">STACK-java-springboot, STACK-spqr-graphql, STACK-webclient, STACK-redis, STACK-mongodb</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">contracts/</span> <span class="desc">CONTRACT-graphql-schema, CONTRACT-rest-endpoints, CONTRACT-error-codes</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">patterns/</span> <span class="desc">PATTERN-multi-tenant, PATTERN-reactive-chain, PATTERN-bff-integration</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">feature-context/</span> <span class="desc">FEAT-offers, FEAT-points, FEAT-tiers - current implementation state</span><br>
+    &nbsp;&nbsp;<span class="folder highlight">_fragments/</span> <span class="count">(8)</span> <span class="desc">frag-spqr-query, frag-webclient-get, frag-redis-cache-aside, frag-mono-zip-parallel...</span><br>
+    &nbsp;&nbsp;<span class="folder">agents/</span> <span class="count">(5)</span> <span class="desc">code-reviewer, feature-builder, debug, refactor, api-integration</span><br>
+    &nbsp;&nbsp;<span class="folder">commands/</span> <span class="count">(6)</span> <span class="desc">NEW_FEATURE, REVIEW_PR, DEBUG_ERROR, WRITE_TESTS, CHECK_REACTIVE, END_SESSION</span><br>
+    &nbsp;&nbsp;<span class="folder">memory/</span> <span class="desc">code-patterns, anti-patterns, feature-decisions, sprint-context</span><br>
+  </div>
+
+  <div class="feature-block animate-on-scroll">
+    <h4>What a dev runs every day <span class="tag tag-orange">Backend Dev Commands</span></h4>
+    <div class="code-block">
+      <span class="comment">// Build a full feature from scratch</span><br>
+      &gt; NEW_FEATURE<br>
+      &gt; Feature: "Favourite Offers" - member saves up to 10 offers.<br>
+      &gt; GraphQL mutation + BFF service + Neo persistence.<br><br>
+      <span class="comment">// Paste a stack trace, get a diagnosis and fix</span><br>
+      &gt; DEBUG_ERROR<br>
+      &gt; [paste stack trace]<br><br>
+      <span class="comment">// Review a PR against actual team patterns, not generic advice</span><br>
+      &gt; REVIEW_PR [paste diff]<br><br>
+      <span class="comment">// Generate tests for a specific service method</span><br>
+      &gt; WRITE_TESTS for BffOffersService.getFavourites()
+    </div>
+  </div>
+
+  <!-- UI Team -->
+  <h3>The UI / Frontend Library</h3>
+
+  <p>The UI team's pain is consistency - every developer making slightly different component decisions, design system tokens getting used wrong, WCAG rules missed under deadline pressure. A UI library solves this by making the design system a first-class citizen of the AI's context.</p>
+
+  <div class="dir-tree animate-on-scroll">
+    <span class="folder">.claude/</span><br>
+    &nbsp;&nbsp;<span class="folder">knowledge/</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">stack/</span> <span class="desc">STACK-react-mui, STACK-redux, STACK-typescript, STACK-graphql-client</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder highlight">design-system/</span> <span class="desc">DS-tokens (exact hex/spacing values), DS-components (props and variants), DS-wcag (WCAG AA rules, selected AAA criteria where feasible)</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">feature-context/</span> <span class="desc">FEAT-offers-ui, FEAT-points-ui, FEAT-profile-ui - current screen state</span><br>
+    &nbsp;&nbsp;<span class="folder">_fragments/</span> <span class="count">(7)</span> <span class="desc">frag-mui-data-grid, frag-redux-slice, frag-api-hook, frag-optimistic-update, frag-error-boundary...</span><br>
+    &nbsp;&nbsp;<span class="folder">agents/</span> <span class="count">(5)</span> <span class="desc">component-builder, a11y, state, performance, ui-reviewer</span><br>
+    &nbsp;&nbsp;<span class="folder">commands/</span> <span class="count">(6)</span> <span class="desc">NEW_COMPONENT, REVIEW_UI_PR, A11Y_AUDIT, MATCH_FIGMA, OPTIMIZE_BUNDLE, END_SESSION</span><br>
+    &nbsp;&nbsp;<span class="folder">memory/</span> <span class="desc">design-system-decisions, component-patterns, a11y-issues, api-contracts</span><br>
+  </div>
+
+  <div class="feature-block animate-on-scroll">
+    <h4>What a UI dev runs every day <span class="tag tag-orange">UI Team Commands</span></h4>
+    <div class="code-block">
+      <span class="comment">// Generate a component to exact spec - no more inconsistency</span><br>
+      &gt; NEW_COMPONENT<br>
+      &gt; Name: FavouriteOffersGrid<br>
+      &gt; MUI grid, 3 columns, skeleton on load, empty state with CTA,<br>
+      &gt; WCAG AA, mobile responsive.<br><br>
+      <span class="comment">// Catch every a11y issue before QA finds it</span><br>
+      &gt; A11Y_AUDIT for src/pages/OffersPage.tsx<br><br>
+      <span class="comment">// Paste a Figma spec, get implementation-ready MUI code</span><br>
+      &gt; MATCH_FIGMA [paste spec or screenshot]<br><br>
+      <span class="comment">// PR review against design system + a11y + perf - not generic feedback</span><br>
+      &gt; REVIEW_UI_PR [paste changed files]
+    </div>
+  </div>
+
+  <!-- QA Team -->
+  <h3>The QA Library</h3>
+
+  <p>QA's biggest time sink is writing test cases from scratch for every feature. A QA library that knows the platform flows, edge cases already discovered, and known Capillary quirks can generate a complete test suite from a feature description in minutes - including the edge cases a manual process would miss.</p>
+
+  <div class="dir-tree animate-on-scroll">
+    <span class="folder">.claude/</span><br>
+    &nbsp;&nbsp;<span class="folder">knowledge/</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">platform/</span> <span class="desc">PLATFORM-flows (earn/redeem/tier), PLATFORM-edge-cases (race conditions, boundaries), PLATFORM-integrations (failure modes)</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">test-standards/</span> <span class="desc">STANDARD-test-types, STANDARD-naming, STANDARD-data (PII rules), STANDARD-environments</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="folder">automation/</span> <span class="desc">AUTO-selenium-patterns, AUTO-api-testing, AUTO-data-driven</span><br>
+    &nbsp;&nbsp;<span class="folder">_fragments/</span> <span class="count">(5)</span> <span class="desc">frag-api-test-case, frag-e2e-scenario, frag-bug-report, frag-regression-checklist, frag-performance-baseline</span><br>
+    &nbsp;&nbsp;<span class="folder">agents/</span> <span class="count">(5)</span> <span class="desc">test-case, bug-analysis, regression, api-test, performance</span><br>
+    &nbsp;&nbsp;<span class="folder">commands/</span> <span class="count">(6)</span> <span class="desc">GENERATE_TEST_CASES, WRITE_BUG_REPORT, BUILD_REGRESSION, REVIEW_COVERAGE, GENERATE_API_TESTS, END_SESSION</span><br>
+    &nbsp;&nbsp;<span class="folder">memory/</span> <span class="desc">edge-cases-found, flaky-tests, platform-bugs, test-patterns, sprint-context</span><br>
+  </div>
+
+  <div class="feature-block animate-on-scroll">
+    <h4>What a QA engineer runs every day <span class="tag tag-orange">QA Commands</span></h4>
+    <div class="code-block">
+      <span class="comment">// Full test suite from a feature description - in minutes</span><br>
+      &gt; GENERATE_TEST_CASES<br>
+      &gt; Feature: Favourite Offers<br>
+      &gt; Member saves, views, removes. Max 10 saved.<br>
+      &gt; Handle: duplicate save, expired offer, concurrent saves from two devices.<br><br>
+      <span class="comment">// Structured bug report from a symptom description</span><br>
+      &gt; WRITE_BUG_REPORT<br>
+      &gt; Points balance shows negative after two rapid redemptions.<br>
+      &gt; UAT, member ID: M12345<br><br>
+      <span class="comment">// Find what tests are missing from a PR diff</span><br>
+      &gt; REVIEW_COVERAGE [paste PR diff]
+    </div>
+  </div>
+
+  <!-- Shared Knowledge -->
+  <h3>How All Four Teams Share Knowledge</h3>
+
+  <p>The SA's Archon and the three team libraries are not isolated. They share a common memory layer - no duplication, clear ownership.</p>
+
+  <div class="table-wrap animate-on-scroll">
+    <table>
+      <thead><tr><th>Memory File</th><th>Who Writes</th><th>Who Reads</th></tr></thead>
+      <tbody>
+        <tr><td><code>memory/architecture-decisions.md</code></td><td>SA (Archon)</td><td>All teams</td></tr>
+        <tr><td><code>memory/platform-constraints.md</code></td><td>SA (Archon)</td><td>All teams</td></tr>
+        <tr><td><code>knowledge/contracts/</code></td><td>SA defines the shape</td><td>Dev implements, UI consumes, QA tests</td></tr>
+        <tr><td><code>memory/code-patterns.md</code></td><td>Backend Dev team</td><td>Backend Dev team</td></tr>
+        <tr><td><code>memory/component-patterns.md</code></td><td>UI team</td><td>UI team</td></tr>
+        <tr><td><code>memory/edge-cases-found.md</code></td><td>QA team</td><td>QA team + SA (risk input)</td></tr>
+        <tr><td><code>memory/sprint-context.md</code></td><td>Each team independently</td><td>Their own library only</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>The SA generates the API contract. The Dev team implements it. The UI team consumes it. The QA team tests it. Each <code>.claude/</code> library knows exactly what it needs to know - nothing more.</p>
+
+  <div class="card-grid animate-on-scroll">
+    <div class="card">
+      <div class="card-icon teal">🏗️</div>
+      <h4>Week 1 - SA</h4>
+      <p>Archon already live. Architecture decisions, contracts, and platform constraints in memory.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon orange">📤</div>
+      <h4>Week 2 - Seed</h4>
+      <p>Extract shared contracts from Archon. Seed all three team libraries with the common knowledge layer.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon blue">⚙️</div>
+      <h4>Week 3-4 - Dev and QA</h4>
+      <p>Backend Dev goes live first (highest immediate ROI). QA follows - test case generation saves the most measurable time.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon gold">🎨</div>
+      <h4>Week 5 - UI</h4>
+      <p>UI team goes live. Component generation, design system enforcement, and a11y audits become daily commands.</p>
+    </div>
+  </div>
+
+  <div class="pull-quote">The SA's output is the team's input. Archon writes the spec. The dev library implements it. The UI library renders it. The QA library tests it. One platform, four AI partners, shared memory.</div>
+
+  <div class="feature-block animate-on-scroll" style="background: linear-gradient(135deg, #e8f8f5, #d4f2ec); border-top: 3px solid var(--teal); border-left: none; margin-left: -40px; margin-right: -40px; padding-left: 40px; padding-right: 40px; border-radius: 0 var(--radius) var(--radius) 0;">
+    <h4 style="color: #0a5c54;">💡 Wait - it does not stop here <span class="tag tag-teal">Open for extension</span></h4>
+    <p style="margin-bottom: 14px;">A similar library can be set up for <strong>Project Managers</strong> - client knowledge, engagement history, doc format preferences, and theming baked in so every status report, RAID log, and kickoff deck comes out consistent and client-ready from day one.</p>
+    <p style="margin-bottom: 14px;">And for <strong>Product Managers</strong> - feature definitions, backlog structure, roadmap framing, and product strategy context so every PRD, sprint brief, and stakeholder update reflects the actual product direction, not a generic template.</p>
+    <p style="margin: 0; padding-top: 14px; border-top: 1px solid rgba(13,148,136,0.25); font-weight: 600; color: #0a5c54;">Let's sync up - the pattern is proven. The only variable is which team goes next.</p>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- ─── Section: Genuine Strengths ─── -->
+  <h2>What Actually Works - Genuine Strengths Worth Knowing</h2>
+
+  <div class="card-grid animate-on-scroll">
+    <div class="card">
+      <div class="card-icon teal">🎯</div>
+      <h4>Token Optimization Architecture</h4>
+      <p>The three-tier registry → selector → context-load profile design solves context bloat before any work begins. The fragment system (50–80 token snippets vs. 1,500 token skill files) delivers a concrete, quantified 95% savings per code pattern - and leaves 80%+ of the context window for actual reasoning.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon orange">🛑</div>
+      <h4>Decision Checkpoint System</h4>
+      <p>Nine checkpoint types, each firing only when relevant, with a "skip checkpoints" escape for speed. This prevents the most expensive failure mode of AI-generated documents: a 50-page output built on a wrong assumption that no one confirmed.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon blue">🔄</div>
+      <h4>END_SESSION + CONTINUE_LAST_SESSION as a Pair</h4>
+      <p>Solves the context-limit problem simply, portably, and without external infrastructure. Writing a recovery snapshot on close and reading it on resume is obvious in hindsight - but rarely implemented this cleanly in practice.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon gold">📋</div>
+      <h4>Backlog System on Flat Files</h4>
+      <p>BL-NNN IDs across global, client, feature, and vendor levels on flat markdown files provides lightweight task tracking without requiring any external tool. Elegant and portable.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon teal">🏛️</div>
+      <h4>Architecture Debate System</h4>
+      <p>Five perspective agents, five angles, formal ADR output - this codifies a pattern most teams do informally in meetings. Making it a repeatable command is a genuine productivity insight with a consistent paper trail.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon orange">👥</div>
+      <h4>Extension to Dev, UI, and QA Teams</h4>
+      <p>Showing how the same .claude/ pattern generalises across the delivery team - with shared memory contracts and clear ownership - multiplies the blog's value significantly. One system, four AI partners.</p>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- ─── Section: Results ─── -->
+  <h2>The Results</h2>
+
+  <p>Based on internal use across client engagements: before building this system, generating an SDD took 2-3 days of back-and-forth with Claude, producing a 15-page document that still needed heavy manual editing. Now:</p>
+
+  <div class="card-grid animate-on-scroll">
+    <div class="card" style="text-align:center;">
+      <div style="font-family:'Fraunces',serif;font-size:36px;font-weight:800;color:var(--accent);">40-80</div>
+      <p style="margin-top:4px;">pages per SDD generation</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-family:'Fraunces',serif;font-size:36px;font-weight:800;color:var(--teal);">~1hr</div>
+      <p style="margin-top:4px;">from prompt to complete SDD (architect reviews before delivery)</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-family:'Fraunces',serif;font-size:36px;font-weight:800;color:var(--blue);">3</div>
+      <p style="margin-top:4px;">specs per feature (dev + UI + QA)</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-family:'Fraunces',serif;font-size:36px;font-weight:800;color:var(--gold);">$0</div>
+      <p style="margin-top:4px;">additional tooling beyond Claude Team plan</p>
+    </div>
+  </div>
+
+  <div class="feature-block animate-on-scroll" style="background:var(--surface-warm);border-left:3px solid var(--ink-muted);">
+    <p style="color:var(--ink-muted);font-size:14px;margin:0;"><em><!-- HUMAN TO SUPPLY: one redacted SDD section, a timing log, or a before/after comparison. Even a single page changes how this section lands for a technical audience. --></em></p>
+  </div>
+
+  <p>The SDDs now include complete API contracts with actual JSON payloads, 7-column field mapping tables, explicit business rules written as conditional logic, error handling tables per feature, and sequence diagrams for multi-system flows. All generated documents are reviewed and approved by the architect before delivery to clients. They're documents that engineers can implement from without asking "but how does X work?"</p>
+
+  <p>The entire setup is reproducible - clone the Git repo, install Claude Code, and any SA on the team has the same Archon setup with shared knowledge, shared decisions, and shared learnings. No vendor lock-in beyond Anthropic's API (which you're already paying for). No proprietary tools. No subscriptions. Note: context-heavy sessions (SDD generation) consume significant token quota - monitor usage with /status and plan session frequency accordingly.</p>
+
+  <div class="pull-quote">The library isn't a static reference manual. It's a living system that learns from every project, every migration, every incident. Each <code>UPDATE_LEARNING</code> makes Archon smarter for the next session - and for every architect on the team.</div>
+
+  <p>If you're an architect spending hours re-explaining your platform to AI assistants, stop. Build the knowledge base once. Structure it for token efficiency. Add specialist agents. Add memory. Add commands. The initial investment is significant - but it compounds with every conversation, every project, every team member who uses it.</p>
+
+  <p>The entire <code>.claude</code> Archon system is available as a zip file. Unzip, symlink, <code>claude</code>. Start with <code>ARCHITECT_MODE</code>.</p>
+
+  <hr class="sep">
+
+  <!-- ══════════ ECOSYSTEM SECTION ══════════ -->
+  <h2 class="animate-on-scroll">The Ecosystem Around You: Plugins, Libraries, and What to Actually Use</h2>
+
+  <p class="animate-on-scroll">Whether you are a developer, solution architect, QA engineer, PM, or designer - the Claude Code ecosystem has grown fast. There are memory plugins, skill packs, automation bridges, and curated starter repos for almost every role. Before you install everything you find, it helps to understand what each tool actually solves - and what it costs you.</p>
+
+  <blockquote class="pull-quote animate-on-scroll">Bookmark this. One good repo here can save you weeks of trial and error.</blockquote>
+
+  <p class="animate-on-scroll">Below is a curated list worth knowing. These are not endorsements - they are starting points. Evaluate each against your context, your team, and your security posture before adopting.</p>
+
+  <div class="table-wrap animate-on-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Resource</th>
+          <th>Best For</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>Claude Mem</strong></td>
+          <td>Long-running projects, large codebases, multi-session feature work</td>
+          <td><a href="https://github.com/thedotmack/claude-mem" target="_blank" rel="noopener noreferrer" style="color:var(--accent);border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='var(--accent)'" onmouseout="this.style.borderBottomColor='transparent'">github.com/thedotmack/claude-mem</a></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>UI UX Pro Max</strong></td>
+          <td>Landing pages, dashboards, design systems, and frontend-heavy builds</td>
+          <td><a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill" target="_blank" rel="noopener noreferrer" style="color:var(--accent);border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='var(--accent)'" onmouseout="this.style.borderBottomColor='transparent'">github.com/nextlevelbuilder/ui-ux-pro-max-skill</a></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>n8n-MCP</strong></td>
+          <td>Internal tooling, webhook automations, CRM flows, Slack bots, and ops workflows</td>
+          <td><a href="https://github.com/czlonkowski/n8n-mcp" target="_blank" rel="noopener noreferrer" style="color:var(--accent);border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='var(--accent)'" onmouseout="this.style.borderBottomColor='transparent'">github.com/czlonkowski/n8n-mcp</a></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>Obsidian Skills</strong></td>
+          <td>Engineers using Obsidian for research, notes, architecture docs, or system thinking</td>
+          <td><a href="https://github.com/kepano/obsidian-skills" target="_blank" rel="noopener noreferrer" style="color:var(--accent);border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='var(--accent)'" onmouseout="this.style.borderBottomColor='transparent'">github.com/kepano/obsidian-skills</a></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>LightRAG</strong></td>
+          <td>Internal knowledge assistants, doc search, support copilots, and AI apps over proprietary data</td>
+          <td><a href="https://github.com/hkuds/lightrag" target="_blank" rel="noopener noreferrer" style="color:var(--accent);border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='var(--accent)'" onmouseout="this.style.borderBottomColor='transparent'">github.com/hkuds/lightrag</a></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>Everything Claude Code</strong></td>
+          <td>Power users and teams building a repeatable, structured Claude Code setup</td>
+          <td><a href="https://github.com/affaan-m/everything-claude-code" target="_blank" rel="noopener noreferrer" style="color:var(--accent);border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='var(--accent)'" onmouseout="this.style.borderBottomColor='transparent'">github.com/affaan-m/everything-claude-code</a></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>Superpowers</strong></td>
+          <td>Solo builders and small teams who want a structured AI-assisted dev process</td>
+          <td><a href="https://github.com/obra/superpowers" target="_blank" rel="noopener noreferrer" style="color:var(--accent);border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='var(--accent)'" onmouseout="this.style.borderBottomColor='transparent'">github.com/obra/superpowers</a></td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><strong>Awesome Claude Code</strong></td>
+          <td>Best starting point if you want to explore the Claude Code landscape fast</td>
+          <td><a href="https://github.com/hesreallyhim/awesome-claude-code" target="_blank" rel="noopener noreferrer" style="color:var(--accent);border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='var(--accent)'" onmouseout="this.style.borderBottomColor='transparent'">github.com/hesreallyhim/awesome-claude-code</a></td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><strong>Get Shit Done (GSD)</strong></td>
+          <td>Feature shipping, spec-based execution, and keeping longer sessions sharp</td>
+          <td><a href="https://github.com/gsd-build/get-shit-done" target="_blank" rel="noopener noreferrer" style="color:var(--accent);border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='var(--accent)'" onmouseout="this.style.borderBottomColor='transparent'">github.com/gsd-build/get-shit-done</a></td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><strong>Claude Code Best Practice</strong></td>
+          <td>Tightening prompting habits, improving setup quality, and onboarding faster into Claude Code</td>
+          <td><a href="https://github.com/shanraisshan/claude-code-best-practice" target="_blank" rel="noopener noreferrer" style="color:var(--accent);border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='var(--accent)'" onmouseout="this.style.borderBottomColor='transparent'">github.com/shanraisshan/claude-code-best-practice</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="animate-on-scroll" style="margin-top:48px;">Before You Adopt Any Plugin: What to Know</h3>
+
+  <p class="animate-on-scroll">Plugins solve real problems. But each one comes with trade-offs that are easy to miss when you are excited about a new capability. Here is what to audit before adding anything to your setup - especially in a team or enterprise context.</p>
+
+  <div class="feature-block animate-on-scroll" style="background:linear-gradient(135deg,#fff8f5 0%,#fff 100%);border-left:3px solid var(--accent);">
+    <h4><span class="tag-orange">Security First</span> Where Does Your Data Actually Go?</h4>
+    <p>Most memory and skill plugins sync to cloud infrastructure. That means your codebase snippets, client decisions, architecture notes, and proprietary context leave your machine. For personal projects - fine. For enterprise work with client data, NDAs, or compliance requirements - this is a hard stop. Always ask: <em>where is my context stored, who can access it, and what is the retention policy?</em></p>
+  </div>
+
+  <div class="feature-block animate-on-scroll" style="border-left:3px solid var(--teal);">
+    <h4>The Other Challenges</h4>
+    <ul style="padding-left:20px;line-height:2;">
+      <li><strong>Fragmentation</strong> - Five plugins running in parallel with no shared context between them. Plugin A does not know what Plugin B learned. You end up with siloed capabilities, not a coherent system.</li>
+      <li><strong>Generic outputs</strong> - A UI/UX plugin gives you generic best practices. It does not know your stack, your constraints, or your team's conventions. Every output needs manual correction for your actual context.</li>
+      <li><strong>Vendor dependency</strong> - Free or paid, tools shut down, change terms, or get abandoned. Your accumulated context and workflows are at risk if they live on someone else's infrastructure.</li>
+      <li><strong>Black-box retrieval</strong> - Semantic memory retrieval is probabilistic. You do not know what was surfaced and what was silently dropped. This is fine for casual use - dangerous when accuracy matters.</li>
+      <li><strong>No workflow layer</strong> - A plugin gives you a capability, not a workflow. It cannot orchestrate: load the right context, apply the right template, write to the right output folder, and close with a memory update. That orchestration is what a structured local setup provides.</li>
+      <li><strong>Token budget blindness</strong> - Most plugins have no concept of how much context they are consuming. Unbounded memory injection in a 200K window degrades output quality on the actual task.</li>
+    </ul>
+  </div>
+
+  <div class="feature-block animate-on-scroll" style="background:linear-gradient(135deg,#e0f5f3 0%,#fff 100%);border-left:3px solid var(--teal);">
+    <h4><span class="tag" style="background:var(--teal);color:#fff;padding:2px 10px;border-radius:100px;font-size:11px;margin-right:8px;">Enterprise</span> Why a Local Setup Is Non-Negotiable as the Foundation</h4>
+    <p>Plugins are additive. A local setup is foundational. The difference: your local <code>.claude/</code> library keeps all context on your machine, tracked in git, with no third-party servers in the chain. It is domain-specific to your actual stack - not a generic tool trying to cover every use case. It evolves from real usage through guided knowledge updates. And it is one coherent system where every component knows about every other. That is not something you can assemble from plugins alone.</p>
+    <p style="margin-top:12px;">Use plugins to extend capabilities. Use your local library as the foundation they extend.</p>
+  </div>
+
+  <h3 class="animate-on-scroll" style="margin-top:48px;">Best Practices: The Short List</h3>
+
+  <div class="feature-block animate-on-scroll" style="background:var(--blue-soft);border-left:3px solid var(--blue);">
+    <h4 style="color:var(--blue);">Archon Assists - The Architect Decides</h4>
+    <p>Archon assists the architect - it does not replace architectural judgement. All generated designs, contracts, and plans are reviewed and owned by the Architect. The checkpoint system exists specifically to ensure critical decisions are confirmed by a human before execution proceeds. Quality checks produce a consolidated review block returned to the architect. Remediation is human-directed - the architect reviews findings and re-runs affected sections as needed.</p>
+  </div>
+
+  <p class="animate-on-scroll">Regardless of your role or setup, these habits compound over time.</p>
+
+  <div class="card-grid animate-on-scroll" style="margin-top:24px;">
+    <div class="card">
+      <div class="card-icon orange">1</div>
+      <h4>Always Start Fresh</h4>
+      <p>New task = new session. Do not carry stale context from a previous conversation into a new problem. Old threads pollute reasoning. A clean session with the right context loads is faster and more accurate than a long running one.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon teal">2</div>
+      <h4>Commit Small and Often</h4>
+      <p>Commit after each meaningful output - a generated doc, a decision recorded, a spec written. Git is your audit trail. Small commits make it trivial to roll back a bad output without losing everything around it.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon blue">3</div>
+      <h4>Close Every Session Properly</h4>
+      <p>A session that ends without saving its decisions is a session that never happened. Run your close command (END_SESSION or equivalent) before you close the tab. Decisions not saved are decisions lost - and you will re-make them in the next session at full cost.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon gold">4</div>
+      <h4>.claudeignore for Coders</h4>
+      <p>Treat <code>.claudeignore</code> like <code>.gitignore</code>. Keep <code>node_modules</code>, build artifacts, <code>.env</code> files, credentials, and large generated files out of Claude's context. Irrelevant files waste tokens and dilute the signal. Set it up once, and every session is cleaner.</p>
+    </div>
+  </div>
+
+  <div class="card-grid animate-on-scroll" style="margin-top:16px;grid-template-columns:1fr;">
+    <div class="card">
+      <div class="card-icon orange">5</div>
+      <h4>One Task Per Session</h4>
+      <p>Mixing unrelated tasks in a single session degrades output quality on both. A session working on a database migration should not also be reviewing UI copy. Focused context produces focused output. When the task shifts, open a new session with the right context profile loaded.</p>
+    </div>
+  </div>
+
+  <div class="feature-block animate-on-scroll" style="background:linear-gradient(135deg,#f5f0eb 0%,#fff 100%);border-left:3px solid var(--accent);margin-top:36px;">
+    <h4>The Bottom Line</h4>
+    <p>The ecosystem is rich and growing fast. Plugins are useful - some are genuinely excellent. But no plugin replaces a well-structured local setup built for your actual domain, your actual stack, and your actual team. Build the foundation first. Add plugins where they extend - not replace - that foundation. And before any plugin touches enterprise work: audit where data goes, check vendor terms, and test against your security policy.</p>
+    <p style="margin-top:12px;font-weight:600;color:var(--accent);">Your local setup is the moat. Plugins are the tools inside it.</p>
+  </div>
+
+  <div style="margin-top:64px;padding:48px 0 32px;text-align:center;border-top:1px solid var(--border);">
+    <p style="font-family:'Fraunces',serif;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:16px;">- from the Archon knowledge base -</p>
+    <p style="font-family:'Fraunces',serif;font-style:italic;font-size:28px;color:var(--ink);line-height:1.4;max-width:600px;margin:0 auto;">The best architecture is the one that outlives the architect who designed it.</p>
+    <p style="margin-top:20px;font-size:15px;color:var(--ink-muted);letter-spacing:0.04em;">Build systems worth inheriting. Keep learning. Keep shipping.</p>
+  </div>
+
+</article>
+
+<!-- ════════════════════════════════════════════ FOOTER ════════════════════════════════════════════ -->
+<footer class="footer">
+  <p><strong>ARCHON - A Self-Updating Library</strong> </p>
+  <p style="margin-top:8px;">Built for the Rewards+ Platform · Architected by Shivam Raj · Powered by Claude</p>
+  <p style="margin-top:6px;font-size:12px;">Structured for best utilization of Claude Setup - Token efficiency and Context management</p>
+</footer>
+
+<script>
+// Scroll-triggered animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
